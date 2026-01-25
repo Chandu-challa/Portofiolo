@@ -53,12 +53,11 @@ export default function AboutPage() {
                   <p className="text-xs text-cyan-400 mt-0.5">N.B.K.R.I.S.T</p>
                 </div>
                 <a
-                  href="/resume.pdf"
+                  href="https://drive.google.com/file/d/19ZmEnTX8PT_NsG9YY-rr7FjfXkSkb6Me/view?usp=sharing"
                   download
                   className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 hover:scale-105 transition-all flex items-center justify-center gap-2"
                 >
-                  <Download className="w-3.5 h-3.5" />
-                  Download Resume
+                  Resume
                 </a>
               </div>
             </div>
