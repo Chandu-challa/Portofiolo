@@ -1,0 +1,312 @@
+{
+  "cms-machine-shop": [
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/03-dashboard.webp",
+      "alt": "Change Management System — Machine Shop: Dashboard screen; personal and operational data redacted.",
+      "originalName": "Dashboard.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/01-accessmanagementsystem.webp",
+      "alt": "Change Management System — Machine Shop: AccessManagementSystem screen; personal and operational data redacted.",
+      "originalName": "AccessManagementSystem.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/02-addtransaction.webp",
+      "alt": "Change Management System — Machine Shop: AddTransaction screen; personal and operational data redacted.",
+      "originalName": "AddTransaction.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/04-ecr-tracking.webp",
+      "alt": "Change Management System — Machine Shop: ECR tracking screen; personal and operational data redacted.",
+      "originalName": "Ecr_Tracking.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/05-hd-trackingsheet.webp",
+      "alt": "Change Management System — Machine Shop: HD TrackingSheet screen; personal and operational data redacted.",
+      "originalName": "HD_TrackingSheet.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/06-history.webp",
+      "alt": "Change Management System — Machine Shop: History screen; personal and operational data redacted.",
+      "originalName": "History.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/07-main.webp",
+      "alt": "Change Management System — Machine Shop: Main screen; personal and operational data redacted.",
+      "originalName": "Main.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/08-riskanalysis-approve.webp",
+      "alt": "Change Management System — Machine Shop: Riskanalysis Approve screen; personal and operational data redacted.",
+      "originalName": "Riskanalysis_Approve.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/09-updattransationdetails.webp",
+      "alt": "Change Management System — Machine Shop: Update transaction details screen; personal and operational data redacted.",
+      "originalName": "UpdateTransactionDetails.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/10-access.webp",
+      "alt": "Change Management System — Machine Shop: access screen; personal and operational data redacted.",
+      "originalName": "access.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/11-change-comparison.webp",
+      "alt": "Change Management System — Machine Shop: change comparison screen; personal and operational data redacted.",
+      "originalName": "change_comparison.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/12-changeassesment.webp",
+      "alt": "Change Management System — Machine Shop: changeassesment screen; personal and operational data redacted.",
+      "originalName": "changeassesment.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/13-changerequestapprove.webp",
+      "alt": "Change Management System — Machine Shop: changerequestapprove screen; personal and operational data redacted.",
+      "originalName": "changerequestapprove.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/14-horizantal.webp",
+      "alt": "Change Management System — Machine Shop: Horizontal screen; personal and operational data redacted.",
+      "originalName": "Horizontal.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/15-tech-view-changeassessment-.webp",
+      "alt": "Change Management System — Machine Shop: tech view(Changeassessment) screen; personal and operational data redacted.",
+      "originalName": "tech_view(Changeassessment).png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/16-tech-view-documents-.webp",
+      "alt": "Change Management System — Machine Shop: tech view(Documents) screen; personal and operational data redacted.",
+      "originalName": "tech_view(Documents).png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/17-tech-view-riskanalysis-.webp",
+      "alt": "Change Management System — Machine Shop: tech view(Riskanalysis) screen; personal and operational data redacted.",
+      "originalName": "tech_view(Riskanalysis).png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-machine-shop/18-tech-view-changerequestdetails-.webp",
+      "alt": "Change Management System — Machine Shop: tech view(changerequestdetails) screen; personal and operational data redacted.",
+      "originalName": "tech_view(changerequestdetails).png"
+    }
+  ],
+  "cms-foundry": [
+    {
+      "src": "/images/project-screenshots/cms-foundry/02-ecr-tracking.webp",
+      "alt": "Change Management System — Foundry: ECR tracking screen; personal and operational data redacted.",
+      "originalName": "Ecr_tracking.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-foundry/01-assementform.webp",
+      "alt": "Change Management System — Foundry: Assessment form screen; personal and operational data redacted.",
+      "originalName": "AssessmentForm.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-foundry/03-login.webp",
+      "alt": "Change Management System — Foundry: login screen; personal and operational data redacted.",
+      "originalName": "login.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-foundry/04-newitems.webp",
+      "alt": "Change Management System — Foundry: newitems screen; personal and operational data redacted.",
+      "originalName": "newitems.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-foundry/05-requestform.webp",
+      "alt": "Change Management System — Foundry: requestform screen; personal and operational data redacted.",
+      "originalName": "requestform.png"
+    },
+    {
+      "src": "/images/project-screenshots/cms-foundry/06-requirementtable.webp",
+      "alt": "Change Management System — Foundry: requirementtable screen; personal and operational data redacted.",
+      "originalName": "requirementtable.png"
+    }
+  ],
+  "security-management": [
+    {
+      "src": "/images/project-screenshots/security-management/04-gate-checkinvisitors.webp",
+      "alt": "Security Management System: Gate CheckInVisitors screen; personal and operational data redacted.",
+      "originalName": "Gate_CheckInVisitors.png"
+    },
+    {
+      "src": "/images/project-screenshots/security-management/01-access.webp",
+      "alt": "Security Management System: Access screen; personal and operational data redacted.",
+      "originalName": "Access.png"
+    },
+    {
+      "src": "/images/project-screenshots/security-management/02-bicyclelogs.webp",
+      "alt": "Security Management System: BicycleLogs screen; personal and operational data redacted.",
+      "originalName": "BicycleLogs.png"
+    },
+    {
+      "src": "/images/project-screenshots/security-management/03-bicycles-master.webp",
+      "alt": "Security Management System: Bicycles Master screen; personal and operational data redacted.",
+      "originalName": "Bicycles Master.png"
+    },
+    {
+      "src": "/images/project-screenshots/security-management/05-login.webp",
+      "alt": "Security Management System: Login screen; personal and operational data redacted.",
+      "originalName": "Login.png"
+    },
+    {
+      "src": "/images/project-screenshots/security-management/06-opentrasactions.webp",
+      "alt": "Security Management System: Open transactions screen; personal and operational data redacted.",
+      "originalName": "OpenTransactions.png"
+    },
+    {
+      "src": "/images/project-screenshots/security-management/07-optionsmaster.webp",
+      "alt": "Security Management System: OptionsMaster screen; personal and operational data redacted.",
+      "originalName": "OptionsMaster.png"
+    },
+    {
+      "src": "/images/project-screenshots/security-management/08-registered-vehicles.webp",
+      "alt": "Security Management System: Registered Vehicles screen; personal and operational data redacted.",
+      "originalName": "Registered_Vehicles.png"
+    },
+    {
+      "src": "/images/project-screenshots/security-management/09-vehicle-logmaster.webp",
+      "alt": "Security Management System: Vehicle LogMaster screen; personal and operational data redacted.",
+      "originalName": "Vehicle_LogMaster.png"
+    },
+    {
+      "src": "/images/project-screenshots/security-management/10-visitor-approvals.webp",
+      "alt": "Security Management System: Visitor Approvals screen; personal and operational data redacted.",
+      "originalName": "Visitor_Approvals.png"
+    },
+    {
+      "src": "/images/project-screenshots/security-management/11-visitor-details.webp",
+      "alt": "Security Management System: Visitor Details screen; personal and operational data redacted.",
+      "originalName": "Visitor_Details.png"
+    },
+    {
+      "src": "/images/project-screenshots/security-management/12-visitor-reqform.webp",
+      "alt": "Security Management System: Visitor ReqForm screen; personal and operational data redacted.",
+      "originalName": "Visitor_ReqForm.png"
+    },
+    {
+      "src": "/images/project-screenshots/security-management/13-visitors-history.webp",
+      "alt": "Security Management System: Visitors History screen; personal and operational data redacted.",
+      "originalName": "Visitors_History.png"
+    }
+  ],
+  "dormitory-management": [
+    {
+      "src": "/images/project-screenshots/dormitory-management/03-dashboard.webp",
+      "alt": "Dormitory Management System: Dashboard screen; personal and operational data redacted.",
+      "originalName": "Dashboard.png"
+    },
+    {
+      "src": "/images/project-screenshots/dormitory-management/01-approvals.webp",
+      "alt": "Dormitory Management System: Approvals screen; personal and operational data redacted.",
+      "originalName": "Approvals.png"
+    },
+    {
+      "src": "/images/project-screenshots/dormitory-management/02-checkoutform.webp",
+      "alt": "Dormitory Management System: CheckoutForm screen; personal and operational data redacted.",
+      "originalName": "CheckoutForm.png"
+    },
+    {
+      "src": "/images/project-screenshots/dormitory-management/04-hr-request.webp",
+      "alt": "Dormitory Management System: HR Request screen; personal and operational data redacted.",
+      "originalName": "HR_Request.png"
+    },
+    {
+      "src": "/images/project-screenshots/dormitory-management/05-login.webp",
+      "alt": "Dormitory Management System: Login screen; personal and operational data redacted.",
+      "originalName": "Login.png"
+    },
+    {
+      "src": "/images/project-screenshots/dormitory-management/06-maintainance.webp",
+      "alt": "Dormitory Management System: Maintenance screen; personal and operational data redacted.",
+      "originalName": "Maintenance.png"
+    },
+    {
+      "src": "/images/project-screenshots/dormitory-management/07-roomwise.webp",
+      "alt": "Dormitory Management System: Roomwise screen; personal and operational data redacted.",
+      "originalName": "Roomwise.png"
+    },
+    {
+      "src": "/images/project-screenshots/dormitory-management/08-supplier-form.webp",
+      "alt": "Dormitory Management System: Supplier Form screen; personal and operational data redacted.",
+      "originalName": "Supplier_Form.png"
+    },
+    {
+      "src": "/images/project-screenshots/dormitory-management/09-employee-history.webp",
+      "alt": "Dormitory Management System: employee history screen; personal and operational data redacted.",
+      "originalName": "employee_history.png"
+    }
+  ],
+  "canteen-management": [
+    {
+      "src": "/images/project-screenshots/canteen-management/03-dashboard.webp",
+      "alt": "Canteen Management System: Dashboard screen; personal and operational data redacted.",
+      "originalName": "Dashboard.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/01-access.webp",
+      "alt": "Canteen Management System: Access screen; personal and operational data redacted.",
+      "originalName": "Access.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/02-adjust-stock.webp",
+      "alt": "Canteen Management System: Adjust Stock screen; personal and operational data redacted.",
+      "originalName": "Adjust_Stock.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/04-grains-issue.webp",
+      "alt": "Canteen Management System: Grains Issue screen; personal and operational data redacted.",
+      "originalName": "Grains Issue.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/05-groceries-master.webp",
+      "alt": "Canteen Management System: Groceries Master screen; personal and operational data redacted.",
+      "originalName": "Groceries_Master.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/06-ingredients-consumed.webp",
+      "alt": "Canteen Management System: Ingredients Consumed screen; personal and operational data redacted.",
+      "originalName": "Ingredients_Consumed.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/07-item-ingredients-mapping.webp",
+      "alt": "Canteen Management System: Item Ingredients Mapping screen; personal and operational data redacted.",
+      "originalName": "Item_Ingredients_Mapping.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/08-itemsmaster.webp",
+      "alt": "Canteen Management System: ItemsMaster screen; personal and operational data redacted.",
+      "originalName": "ItemsMaster.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/09-login.webp",
+      "alt": "Canteen Management System: Login screen; personal and operational data redacted.",
+      "originalName": "Login.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/10-menu.webp",
+      "alt": "Canteen Management System: Menu screen; personal and operational data redacted.",
+      "originalName": "Menu.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/11-non-reciepe-items.webp",
+      "alt": "Canteen Management System: Non Reciepe Items screen; personal and operational data redacted.",
+      "originalName": "Non_Reciepe_Items.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/12-reciepe-viewer.webp",
+      "alt": "Canteen Management System: Reciepe Viewer screen; personal and operational data redacted.",
+      "originalName": "Reciepe_Viewer.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/13-stock-entry.webp",
+      "alt": "Canteen Management System: Stock Entry screen; personal and operational data redacted.",
+      "originalName": "Stock Entry.png"
+    },
+    {
+      "src": "/images/project-screenshots/canteen-management/14-stock-entry.webp",
+      "alt": "Canteen Management System: Stock Entry screen; personal and operational data redacted.",
+      "originalName": "Stock_Entry.png"
+    }
+  ]
+}

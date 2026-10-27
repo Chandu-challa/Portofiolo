@@ -16,6 +16,17 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+  --color-portfolio-bg: var(--bg-primary);
+  --color-portfolio-deep: var(--bg-deep);
+  --color-portfolio-panel: var(--bg-secondary);
+  --color-portfolio-card: var(--bg-card);
+  --color-portfolio-border: var(--border-subtle);
+  --color-portfolio-accent: var(--accent-blue);
+  --color-portfolio-violet: var(--accent-violet);
+  --color-portfolio-accent-light: var(--accent-light);
+  --color-portfolio-accent-bright: var(--accent-bright);
+  --color-portfolio-text: var(--text-primary);
+  --color-portfolio-muted: var(--text-secondary);
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -43,6 +54,22 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* ── Portfolio design tokens ──────────────────────────── */
+:root {
+  --bg-primary: #080B12;
+  --bg-secondary: #111722;
+  --bg-card: #151D2A;
+  --border-subtle: #293548;
+  --accent-blue: #5B8CFF;
+  --accent-violet: #8B7CFF;
+  --accent-light: #78A0FF;
+  --accent-bright: #8EACFF;
+  --bg-deep: #0D1520;
+  --text-primary: #F4F7FB;
+  --text-secondary: #A7B2C4;
+}
+
+/* ── shadcn/ui tokens ─────────────────────────────────── */
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -118,5 +145,34 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+section[id],
+main[id] {
+  scroll-margin-top: 6rem;
+}
+
+:focus-visible {
+  outline: 2px solid #78A0FF;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }

@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Chandu Challa Portfolio
 
-## Getting Started
+A one-page developer portfolio built with Next.js 16, React 19, TypeScript, Tailwind CSS, Framer Motion, and EmailJS. It presents Chandu Challa’s experience, education, technical skills, certificates, and six private enterprise applications.
 
-First, run the development server:
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`. Create a production build with `npm run build`, then serve it with `npm start`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Contact form email delivery
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The contact form sends messages through EmailJS to `chanduchanduchalla7@gmail.com`. Set up an EmailJS email service and template, then configure these public identifiers in `.env.local` for local development and in the Netlify site environment for deployment:
 
-## Learn More
+```text
+NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id
+NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
+```
 
-To learn more about Next.js, take a look at the following resources:
+Set the EmailJS template’s **To Email** to `chanduchanduchalla7@gmail.com` and **Reply To** to `{{reply_to}}`. Use `{{from_name}}`, `{{reply_to}}`, `{{subject}}`, and `{{message}}` in the email subject/body. Keep the recipient fixed in the template; do not use a visitor-provided field for it. Restrict allowed origins in EmailJS to the local development address and deployed site, and enable provider-side spam protection. The form reports an error and offers a direct email fallback until all three identifiers are configured. Never put an EmailJS private key in a `NEXT_PUBLIC_` variable.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project screenshots
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The site serves only the softly blurred WebP previews in `public/images/project-screenshots/`. Employee and operational details remain obscured. Original enterprise screenshots are preserved in the ignored `.local-private-assets/project-screenshots-original/` folder and are not included in the public site. Five projects with available screenshot evidence appear in the featured work section; the Gauge Management System is omitted until a public-safe preview and verified details are available.
 
-## Deploy on Vercel
+Project case studies describe workflows visible in the available screenshots. Project-specific implementation stacks, individual module ownership, and code-level challenges are not claimed where supporting source files or notes were unavailable.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Resume and contact
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The resume action opens the PDF at `public/images/Fullstack_developer.pdf`, served at `/images/Fullstack_developer.pdf`. The contact section includes a direct WhatsApp link using the public phone number; it opens a chat for the visitor to send manually and does not require a WhatsApp API account. Update `RESUME_URL`, `EMAIL`, `LINKEDIN_URL`, and `GITHUB_URL` near the top of `app/page.tsx` when those destinations change.
+
+## Deployment
+
+The project retains its Next.js configuration and existing `@netlify/plugin-nextjs` dependency. The contact form requires the three EmailJS public identifiers above in Netlify’s site environment, followed by a redeploy.
+
+The old `/about`, `/projects`, `/experience`, `/contact`, and `/certificates` paths redirect to their matching sections on the home page.

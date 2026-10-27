@@ -1,312 +1,988 @@
-"use client";
+'use client';
 
-import { motion, Variants } from "framer-motion";
-import { useEffect, useState, useCallback } from "react";
-import { FaLinkedin, FaGithub, FaEnvelope, FaTimes } from "react-icons/fa";
-import Footer from "../components/Footer";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
+import { FocusTrap } from 'focus-trap-react';
+import {
+  Github,
+  Linkedin,
+  Mail,
+  Download,
+  Code2,
+  Database,
+  Server,
+  GitBranch,
+  Layers,
+  Building2,
+  Calendar,
+  ArrowUp,
+  Menu,
+  X as XIcon,
+  CheckCircle,
+  Phone,
+  MessageCircle,
+  TrendingUp,
+  ExternalLink,
+} from 'lucide-react';
+import type { Project } from '@/lib/projectData';
+import ProjectsSection from '@/components/projects/ProjectsSection';
+import CertificatesSection from '@/components/certificates/CertificatesSection';
+import CaseStudyModal from '@/components/projects/CaseStudyModal';
+import ContactForm from '@/components/contact/ContactForm';
 
-// 🌟 Constants
-const HERO_TITLE = "Hi, I'm Chandu 👋";
-const HERO_DESC =
-  "A Full Stack Developer who builds modern, fast, and scalable web applications using React, Next.js, and SQL Server.";
+// ─── Static data ───────────────────────────────────────────────────────
+const NAV_ITEMS = [
+  { label: 'Home', href: '#hero' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'About', href: '#about' },
+  { label: 'Certificates', href: '#certificates' },
+  { label: 'Contact', href: '#contact' },
+];
 
-// 🎨 Animation Variants
-const container: Variants = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.12 },
+const RESUME_URL = '/images/Fullstack_developer.pdf';
+const EMAIL = 'chanduchanduchalla7@gmail.com';
+const LINKEDIN_URL = 'https://www.linkedin.com/in/chandu-challa-b91172330/';
+const GITHUB_URL = 'https://github.com/Chandu-challa';
+
+const HIGHLIGHTS = [
+  {
+    label: 'Current Employer',
+    value: 'GreenTech Industries',
+    icon: Building2,
   },
-};
-
-const wordVariant: Variants = {
-  hidden: { y: -50, opacity: 0, rotate: -5 },
-  show: {
-    y: 0,
-    opacity: 1,
-    rotate: 0,
-    transition: { type: "spring", stiffness: 80, damping: 14 },
+  {
+    label: 'Internal Applications',
+    value: '6 enterprise systems',
+    icon: Layers,
   },
-};
+  {
+    label: 'Core Technology Stack',
+    value: 'React · Next.js · Python · SQL Server',
+    icon: Code2,
+  },
+  {
+    label: 'Career Progression',
+    value: 'Intern → Full Stack Developer',
+    icon: TrendingUp,
+  },
+];
 
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  show: (delay = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay, duration: 0.6, ease: "easeOut" },
-  }),
-};
+const SKILLS = [
+  {
+    title: 'Frontend',
+    icon: Code2,
+    color: '#5B8CFF',
+    skills: [
+      'React.js',
+      'Next.js',
+      'JavaScript (ES6+)',
+      'TypeScript',
+      'HTML5',
+      'CSS3',
+      'Tailwind CSS',
+    ],
+  },
+  {
+    title: 'Backend',
+    icon: Server,
+    color: '#8B7CFF',
+    skills: [
+      'Python',
+      'FastAPI',
+      'REST APIs',
+      'JWT Authentication',
+      'Role-Based Access Control',
+    ],
+  },
+  {
+    title: 'Database',
+    icon: Database,
+    color: '#5B8CFF',
+    skills: [
+      'Microsoft SQL Server',
+      'T-SQL',
+      'Stored Procedures',
+      'Joins & Views',
+      'Query Optimisation',
+      'Prisma ORM',
+    ],
+  },
+  {
+    title: 'Development Practices',
+    icon: GitBranch,
+    color: '#8B7CFF',
+    skills: [
+      'API Integration',
+      'Form Validation',
+      'Authentication & Authorisation',
+      'Error Handling',
+      'Debugging',
+      'Git & GitHub',
+    ],
+  },
+];
 
-export default function Home() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [showWelcome, setShowWelcome] = useState(false);
-  const [particles, setParticles] = useState<
-    {
-      id: number;
-      width: number;
-      height: number;
-      top: string;
-      left: string;
-      duration: number;
-      delay: number;
-    }[]
-  >([]);
+const EXPERIENCE = [
+  {
+    title: 'Full Stack Developer',
+    company: 'GreenTech Industries',
+    type: 'Full-Time',
+    dates: 'August 2025 – Present',
+    isCurrent: true,
+    responsibilities: [
+      'Develop and maintain enterprise web applications for business workflows',
+      'Build responsive React and Next.js interfaces and integrate REST APIs',
+      'Work with Python, FastAPI, SQL Server queries, and stored procedures',
+      'Implement validation, permissions, error handling, and application maintenance',
+    ],
+  },
+  {
+    title: 'Full Stack Developer Intern',
+    company: 'GreenTech Industries',
+    type: 'Internship',
+    dates: 'January 2025 – July 2025',
+    isCurrent: false,
+    responsibilities: [
+      'Translated business requirements into interface and workflow features',
+      'Built reusable React components and integrated application APIs',
+      'Worked with SQL Server queries, stored procedures, and data validation',
+      'Debugged and maintained existing applications with the development team',
+    ],
+  },
+];
 
-  // ✨ Initialize animations & particles
+const APPROACH = [
+  {
+    step: '01',
+    title: 'Understand the workflow',
+    desc: 'Clarify the business need and map the steps people need to complete.',
+  },
+  {
+    step: '02',
+    title: 'Build the interface and integration',
+    desc: 'Create responsive UI, connect APIs and database operations, and handle validation and permissions.',
+  },
+  {
+    step: '03',
+    title: 'Verify and maintain',
+    desc: 'Test complete workflows, resolve issues, and support the application as requirements evolve.',
+  },
+];
+
+// ─── Utility ───────────────────────────────────────────────────────────
+function scrollToSection(href: string) {
+  const id = href.replace('#', '');
+  const el = document.getElementById(id);
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (el) el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+}
+
+function ScrollProgress() {
+  const progressRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 200);
-    const welcomeTimer = setTimeout(() => setShowWelcome(true), 1000);
-
-    const generatedParticles = Array.from({ length: 25 }).map((_, i) => ({
-      id: i,
-      width: Math.random() * 4 + 1,
-      height: Math.random() * 4 + 1,
-      top: `${Math.random() * 100}%`,
-      left: `${Math.random() * 100}%`,
-      duration: 5 + Math.random() * 4,
-      delay: Math.random() * 2,
-    }));
-    setParticles(generatedParticles);
-
-    // Escape key to close modal
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setShowWelcome(false);
+    let frame = 0;
+    const updateProgress = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(() => {
+        const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
+        if (progressRef.current) {
+          progressRef.current.style.transform = `scaleX(${Math.min(Math.max(progress, 0), 1)})`;
+        }
+      });
     };
-    window.addEventListener("keydown", handleEsc);
 
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
     return () => {
-      clearTimeout(timer);
-      clearTimeout(welcomeTimer);
-      window.removeEventListener("keydown", handleEsc);
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', updateProgress);
+      window.removeEventListener('resize', updateProgress);
     };
   }, []);
 
-  const splitWords = useCallback((text: string) => text.split(" "), []);
-
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen text-center text-white overflow-hidden">
-      {/* 🌈 Gradient Background */}
-      <div className="absolute inset-0 animate-gradientMove bg-[length:600%_600%] bg-gradient-to-br from-[#0f0c29] via-[#302b63] via-[#24243e] to-[#0f0c29]" />
+    <div
+      ref={progressRef}
+      className="fixed left-0 top-0 z-[60] h-[2px] w-full origin-left scale-x-0 bg-gradient-to-r from-portfolio-accent to-portfolio-violet"
+      aria-hidden="true"
+    />
+  );
+}
 
-      {/* Shadow overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60 z-10" />
+// ─── Main Component ────────────────────────────────────────────────────
+export default function Home() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
+  const [scrolled, setScrolled] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const mobileToggleRef = useRef<HTMLButtonElement>(null);
+  const closeCaseStudy = useCallback(() => setSelectedProject(null), []);
 
-      {/* ✨ Floating Particles */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
-        {particles.map((p) => (
-          <motion.span
-            key={p.id}
-            className="absolute bg-white rounded-full opacity-10"
-            style={{
-              width: p.width,
-              height: p.height,
-              top: p.top,
-              left: p.left,
-            }}
-            animate={{
-              y: [0, 20, -20, 0],
-              x: [0, -10, 10, 0],
-              opacity: [0.1, 0.4, 0.1],
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: p.duration,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: p.delay,
-            }}
-          />
-        ))}
-      </div>
+  // Scroll tracking
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setScrolled(scrollY > 40);
+      setShowBackToTop(scrollY > 500);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-      {/* 💬 Welcome Modal */}
-      {showWelcome && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setShowWelcome(false)}
+  // Section observer
+  useEffect(() => {
+    const sectionIds = NAV_ITEMS.map((n) => n.href.replace('#', ''));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActiveSection(e.target.id);
+        });
+      },
+      { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
+    );
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  // Keep the page still while the mobile navigation is open and support Escape.
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileOpen(false);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [mobileOpen]);
+
+  // ─── Render ──────────────────────────────────────────────────────────
+  return (
+    <MotionConfig reducedMotion="user">
+    <div className="min-h-screen overflow-x-hidden bg-portfolio-bg text-portfolio-text">
+      {/* Scroll progress bar */}
+      <ScrollProgress />
+
+      {/* ── NAVBAR ───────────────────────────────────────────────── */}
+      <header
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? 'bg-portfolio-bg/95 backdrop-blur-md border-b border-portfolio-border shadow-lg'
+            : 'bg-transparent'
+        }`}
+        role="banner"
+      >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-portfolio-accent focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:outline-none"
         >
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className="bg-gradient-to-br from-slate-800 to-slate-900 border border-blue-500/40 rounded-2xl p-8 max-w-md w-full relative shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setShowWelcome(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white transition"
-              aria-label="Close welcome modal"
-            >
-              <FaTimes className="text-xl" />
-            </button>
+          Skip to content
+        </a>
 
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring" }}
-              className="text-6xl mb-4"
+        <nav
+          className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
+          aria-label="Primary navigation"
+        >
+          {/* Brand */}
+          <a
+            href="#hero"
+            className="text-xl font-bold text-portfolio-text hover:text-portfolio-accent transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] rounded"
+            aria-label="Chandu Challa, home"
+          >
+            Chandu<span className="text-portfolio-accent">.</span>
+          </a>
+
+          {/* Desktop nav links */}
+          <ul className="hidden xl:flex items-center gap-4 2xl:gap-6" role="list">
+            {NAV_ITEMS.map(({ label, href }) => {
+              const isActive = activeSection === href.replace('#', '');
+              return (
+                <li key={label}>
+                  <a
+                    href={href}
+                    className={`relative text-sm font-medium transition-colors pb-0.5 focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] rounded ${
+                      isActive
+                        ? 'text-portfolio-accent'
+                        : 'text-portfolio-muted hover:text-portfolio-text'
+                    }`}
+                    aria-current={isActive ? 'location' : undefined}
+                  >
+                    {label}
+                    {isActive && (
+                      <motion.span
+                        layoutId="nav-underline"
+                        className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-portfolio-accent rounded-full"
+                      />
+                    )}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+
+          {/* Resume button */}
+          <a
+            href={RESUME_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden xl:flex items-center gap-2 px-4 py-2 bg-portfolio-accent hover:bg-[#4a7aef] text-white text-sm font-semibold rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] focus:ring-offset-2 focus:ring-offset-[#080B12]"
+          >
+            <Download className="w-3.5 h-3.5" aria-hidden="true" />
+            View Resume
+          </a>
+
+          {/* Mobile hamburger */}
+          <button
+            ref={mobileToggleRef}
+            className="xl:hidden p-2 rounded-lg text-portfolio-muted hover:text-white hover:bg-portfolio-card transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav"
+          >
+            {mobileOpen ? (
+              <XIcon className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
+          </button>
+        </nav>
+
+        {/* Mobile drawer */}
+        <AnimatePresence>
+          {mobileOpen && (
+            <>
+              <motion.div
+                aria-hidden="true"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setMobileOpen(false)}
+                className="fixed inset-x-0 bottom-0 top-[4.5rem] z-40 bg-black/55 xl:hidden"
+              />
+              <FocusTrap focusTrapOptions={{ escapeDeactivates: false, returnFocusOnDeactivate: true }}>
+                <motion.div
+                  id="mobile-nav"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="relative z-50 overflow-hidden border-t border-portfolio-border bg-portfolio-bg xl:hidden"
+                  role="navigation"
+                  aria-label="Mobile navigation"
+                >
+                <div className="flex items-center justify-between px-6 pt-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-portfolio-muted">Navigation</p>
+                  <button
+                    type="button"
+                    onClick={() => setMobileOpen(false)}
+                    className="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm text-portfolio-muted hover:bg-portfolio-card hover:text-white focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+                    aria-label="Close navigation menu"
+                  >
+                    <XIcon className="h-4 w-4" aria-hidden="true" />
+                    Close
+                  </button>
+                </div>
+                <ul className="space-y-1 px-6 py-4" role="list">
+                  {NAV_ITEMS.map(({ label, href }) => {
+                    const isActive = activeSection === href.replace('#', '');
+                    return (
+                      <li key={label}>
+                        <a
+                          href={href}
+                          onClick={() => setMobileOpen(false)}
+                          aria-current={isActive ? 'location' : undefined}
+                          className={`flex min-h-11 w-full items-center rounded-xl px-4 py-3 text-left text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] ${
+                            isActive
+                              ? 'bg-portfolio-accent/10 text-portfolio-accent-bright'
+                              : 'text-portfolio-muted hover:bg-portfolio-card hover:text-portfolio-text'
+                          }`}
+                        >
+                          {label}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="px-6 pb-5">
+                  <a
+                    href={RESUME_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-portfolio-accent px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#4a7aef] focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <Download className="h-4 w-4" aria-hidden="true" />
+                    View Resume
+                  </a>
+                </div>
+                </motion.div>
+              </FocusTrap>
+            </>
+          )}
+        </AnimatePresence>
+      </header>
+
+      <main id="main-content">
+
+      {/* ── HERO ─────────────────────────────────────────────────── */}
+      <section
+        id="hero"
+        className="relative flex min-h-[88svh] items-center overflow-hidden pb-16 pt-28 sm:pt-32"
+        aria-labelledby="hero-heading"
+      >
+        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+          <div className="absolute -right-40 top-12 h-[32rem] w-[32rem] rounded-full bg-portfolio-accent/[0.07] blur-[110px]" />
+          <div className="absolute inset-0 opacity-[0.025]" style={{
+            backgroundImage: 'linear-gradient(#5B8CFF 1px, transparent 1px), linear-gradient(90deg, #5B8CFF 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+          }} />
+        </div>
+
+        <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.12fr_0.88fr] lg:gap-16">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45 }}
+          >
+            <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-portfolio-accent/25 bg-portfolio-accent/[0.08] px-4 py-2 text-xs font-semibold tracking-[0.08em] text-[#AFC3FF] sm:text-sm">
+              FULL STACK DEVELOPER <span className="text-portfolio-accent" aria-hidden="true">·</span> ENTERPRISE WEB APPLICATIONS
+            </p>
+            <p className="mb-3 text-sm font-medium text-portfolio-muted">I&apos;m Chandu Challa</p>
+            <h1 id="hero-heading" className="max-w-3xl text-[2.55rem] font-bold leading-[1.08] tracking-tight text-portfolio-text sm:text-5xl xl:text-[3.65rem]">
+              Building reliable web applications that solve{' '}
+              <span className="bg-gradient-to-r from-[#78A0FF] to-[#A99AFF] bg-clip-text text-transparent">real business problems.</span>
+            </h1>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-portfolio-muted sm:text-lg sm:leading-8">
+              I&apos;m a Full Stack Developer at <span className="font-medium text-portfolio-text">GreenTech Industries</span>, building business applications with React.js, Next.js, Python, FastAPI, and SQL Server.
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-2" aria-label="Core technologies">
+              {['React.js', 'Next.js', 'TypeScript', 'Python', 'FastAPI', 'SQL Server'].map((tech) => (
+                <span key={tech} className="rounded-lg border border-portfolio-border bg-portfolio-panel/80 px-3 py-1.5 text-xs font-medium text-[#C6D0DE] sm:text-sm">{tech}</span>
+              ))}
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a href="#projects" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-portfolio-accent px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#5B8CFF]/15 transition-colors hover:bg-[#4a7aef] focus:outline-none focus:ring-2 focus:ring-[#8EACFF] focus:ring-offset-2 focus:ring-offset-[#080B12]">
+                Explore My Projects
+              </a>
+              <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-portfolio-border bg-portfolio-panel/70 px-5 py-3 text-sm font-semibold text-portfolio-text transition-colors hover:border-portfolio-accent/50 hover:bg-portfolio-card focus:outline-none focus:ring-2 focus:ring-[#8EACFF]">
+                <Download className="h-4 w-4" aria-hidden="true" /> View Resume
+              </a>
+              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center gap-2 rounded-xl px-3 py-3 text-sm font-medium text-portfolio-muted transition-colors hover:text-portfolio-text focus:outline-none focus:ring-2 focus:ring-[#8EACFF]">
+                <Linkedin className="h-4 w-4" aria-hidden="true" /> Connect on LinkedIn
+              </a>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="relative mx-auto w-full max-w-[27rem] lg:mr-2"
+          >
+            <div className="absolute -inset-5 rounded-[2rem] bg-gradient-to-br from-portfolio-accent/20 via-transparent to-portfolio-violet/15 blur-2xl" aria-hidden="true" />
+            <div className="relative aspect-[4/4.5] overflow-hidden rounded-[1.7rem] border border-portfolio-border bg-portfolio-panel shadow-2xl shadow-black/30">
+              <Image
+                src="/images/chandu1.png"
+                alt="Chandu Challa, Full Stack Developer"
+                fill
+                priority
+                sizes="(max-width: 1024px) 80vw, 420px"
+                className="object-cover object-center"
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#080B12] via-[#080B12]/80 to-transparent px-5 pb-5 pt-16 sm:px-6 sm:pb-6">
+                <p className="text-lg font-semibold text-white">Chandu Challa</p>
+                <p className="mt-1 text-sm text-[#CAD4E3]">Full Stack Developer · GreenTech Industries</p>
+              </div>
+            </div>
+            <div className="absolute -left-4 top-7 hidden rounded-xl border border-portfolio-border bg-portfolio-panel/95 px-4 py-3 shadow-xl sm:block">
+              <p className="text-[11px] uppercase tracking-wider text-portfolio-muted">Education</p>
+              <p className="mt-1 text-sm font-medium text-portfolio-text">B.Tech · AI &amp; Data Science</p>
+              <p className="text-xs text-portfolio-muted">NBKR Institute · 2025</p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── HIGHLIGHTS STRIP ─────────────────────────────────────── */}
+      <section
+        className="py-12 border-y border-portfolio-border bg-portfolio-deep/60"
+        aria-label="Professional highlights"
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {HIGHLIGHTS.map(({ label, value, icon: Icon }, i) => (
+              <motion.div
+                key={label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.08 }}
+                className="flex items-start gap-4 p-5 rounded-2xl bg-portfolio-card border border-portfolio-border hover:border-portfolio-accent/30 transition-colors"
+              >
+                <div className="w-10 h-10 rounded-xl bg-portfolio-accent/10 flex items-center justify-center flex-shrink-0">
+                  <Icon className="w-5 h-5 text-portfolio-accent" aria-hidden="true" />
+                </div>
+                <div>
+                  <dt className="text-xs text-portfolio-muted mb-1">{label}</dt>
+                  <dd className="text-sm font-semibold text-portfolio-text">{value}</dd>
+                </div>
+              </motion.div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      <ProjectsSection onViewCaseStudy={setSelectedProject} />
+
+      {/* ── EXPERIENCE ───────────────────────────────────────────── */}
+      <section
+        id="experience"
+        className="py-16 sm:py-24"
+        aria-labelledby="experience-heading"
+      >
+        <div className="max-w-4xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <p className="text-sm font-semibold text-portfolio-accent uppercase tracking-widest mb-3">
+              Work History
+            </p>
+            <h2
+              id="experience-heading"
+              className="text-3xl sm:text-4xl font-bold text-portfolio-text"
             >
-              👋
+              Experience
+            </h2>
+          </motion.div>
+
+          <div className="relative">
+            {/* Timeline line */}
+            <div
+              className="absolute left-[19px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-portfolio-accent to-[#293548] hidden sm:block"
+              aria-hidden="true"
+            />
+
+            <ol className="space-y-10">
+              {EXPERIENCE.map((job, i) => (
+                <motion.li
+                  key={job.title + job.dates}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  className="relative sm:pl-12"
+                >
+                  {/* Timeline dot */}
+                  <div
+                    className={`hidden sm:flex absolute left-0 top-1.5 w-10 h-10 rounded-full border-2 items-center justify-center ${
+                      job.isCurrent
+                        ? 'bg-portfolio-accent border-portfolio-accent'
+                        : 'bg-portfolio-card border-portfolio-border'
+                    }`}
+                    aria-hidden="true"
+                  >
+                    <Building2
+                      className={`w-4 h-4 ${job.isCurrent ? 'text-white' : 'text-portfolio-muted'}`}
+                    />
+                  </div>
+
+                  <div className="p-6 rounded-2xl bg-portfolio-card border border-portfolio-border hover:border-portfolio-accent/30 transition-colors">
+                    <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          <h3 className="text-lg font-bold text-portfolio-text">{job.title}</h3>
+                          <span
+                            className={`px-2.5 py-0.5 text-xs font-medium rounded-full ${
+                              job.isCurrent
+                                ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25'
+                                : 'bg-[#293548] text-portfolio-muted border border-portfolio-border'
+                            }`}
+                          >
+                            {job.type}
+                          </span>
+                        </div>
+                        <p className="text-portfolio-accent font-medium text-sm">{job.company}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-4 mb-5 text-xs text-portfolio-muted">
+                      <span className="flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
+                        {job.dates}
+                      </span>
+                    </div>
+
+                    <ul className="space-y-2" aria-label="Responsibilities">
+                      {job.responsibilities.map((r, ri) => (
+                        <li
+                          key={ri}
+                          className="flex items-start gap-2 text-sm text-portfolio-muted"
+                        >
+                          <CheckCircle
+                            className="w-3.5 h-3.5 text-portfolio-accent flex-shrink-0 mt-0.5"
+                            aria-hidden="true"
+                          />
+                          {r}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </motion.li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SKILLS ───────────────────────────────────────────────── */}
+      <section
+        id="skills"
+        className="py-16 sm:py-24 bg-portfolio-deep/50"
+        aria-labelledby="skills-heading"
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <p className="text-sm font-semibold text-portfolio-accent uppercase tracking-widest mb-3">
+              Technical Skills
+            </p>
+            <h2
+              id="skills-heading"
+              className="text-3xl sm:text-4xl font-bold text-portfolio-text"
+            >
+              What I work with
+            </h2>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {SKILLS.map(({ title, icon: Icon, color, skills }, i) => (
+              <motion.div
+                key={title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="p-6 rounded-2xl bg-portfolio-card border border-portfolio-border hover:border-portfolio-accent/30 hover:shadow-[0_8px_30px_rgba(91,140,255,0.06)] transition-all"
+              >
+                <div
+                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
+                  style={{ backgroundColor: `${color}18` }}
+                >
+                  <Icon className="w-5 h-5" style={{ color }} aria-hidden="true" />
+                </div>
+                <h3 className="text-base font-bold text-portfolio-text mb-4">{title}</h3>
+                <ul className="space-y-2" aria-label={`${title} skills`}>
+                  {skills.map((skill) => (
+                    <li
+                      key={skill}
+                      className="flex items-center gap-2 text-sm text-portfolio-muted"
+                    >
+                      <span
+                        className="w-1 h-1 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: color }}
+                        aria-hidden="true"
+                      />
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── ABOUT ────────────────────────────────────────────────── */}
+      <section
+        id="about"
+        className="py-16 sm:py-24"
+        aria-labelledby="about-heading"
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Education and focus card */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="flex justify-center lg:justify-start"
+            >
+              <div className="w-full max-w-xl rounded-3xl border border-portfolio-border bg-portfolio-panel p-6 sm:p-8">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-portfolio-accent">Education</p>
+                <p className="mt-4 text-2xl font-semibold leading-snug text-portfolio-text">B.Tech in Artificial Intelligence and Data Science</p>
+                <p className="mt-3 text-sm leading-relaxed text-portfolio-muted">NBKR Institute of Science and Technology · Graduated 2025</p>
+                <div className="my-7 h-px bg-[#293548]" />
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-portfolio-accent">Focus</p>
+                <p className="mt-3 text-base font-medium leading-relaxed text-[#E5EAF3]">Enterprise applications, business workflows, and data-driven systems.</p>
+              </div>
             </motion.div>
 
-            <motion.h2
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="text-2xl font-bold text-blue-400 mb-3"
+            {/* Text */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
             >
-              Welcome!
-            </motion.h2>
+              <p className="text-sm font-semibold text-portfolio-accent uppercase tracking-widest mb-3">
+                About Me
+              </p>
+              <h2
+                id="about-heading"
+                className="text-3xl sm:text-4xl font-bold text-portfolio-text mb-6"
+              >
+                More than interfaces — I build complete business applications.
+              </h2>
+              <div className="space-y-4 text-portfolio-muted leading-relaxed">
+                <p>
+                  I&apos;m a Full Stack Developer at <strong className="text-portfolio-text">GreenTech Industries</strong>, building business applications with React.js, Next.js, Python, FastAPI, and SQL Server.
+                </p>
+                <p>
+                  My work spans responsive interfaces, API and database integration, validation, permissions, debugging, and maintaining application workflows with internal teams.
+                </p>
+              </div>
 
-            <motion.p
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="text-gray-300 mb-6 leading-relaxed"
-            >
-              Thanks for visiting my portfolio! I’m <span className="text-blue-400 font-semibold">Chandu Challa</span>, a passionate Full Stack Developer.
-            </motion.p>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <a
+                  href={RESUME_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-portfolio-accent hover:bg-[#4a7aef] text-white font-semibold rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] focus:ring-offset-2 focus:ring-offset-[#080B12]"
+                >
+                  <Download className="w-4 h-4" aria-hidden="true" />
+                  View Resume
+                </a>
+                <button
+                  onClick={() => scrollToSection('#contact')}
+                  className="flex items-center gap-2 px-5 py-2.5 border border-portfolio-border hover:border-portfolio-accent/40 text-portfolio-muted hover:text-portfolio-text rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+                >
+                  <Mail className="w-4 h-4" aria-hidden="true" />
+                  Contact Me
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              onClick={() => setShowWelcome(false)}
-              className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-semibold py-3 px-6 rounded-full shadow-lg transition-transform duration-300"
-            >
-              Let’s Explore!
-            </motion.button>
-          </motion.div>
-        </motion.div>
-      )}
-
-      {/* 🧩 Hero Section */}
-      <motion.div
-        className="relative z-20 px-6 flex flex-col items-center mt-10"
-        variants={container}
-        initial="hidden"
-        animate={isVisible ? "show" : "hidden"}
+      {/* ── ENGINEERING APPROACH ─────────────────────────────────── */}
+      <section
+        className="py-16 sm:py-24"
+        aria-labelledby="approach-heading"
       >
-        {/* Title */}
-        <h1 className="text-4xl md:text-6xl font-extrabold mb-6 flex flex-wrap justify-center">
-          {splitWords(HERO_TITLE).map((word, i) => (
-            <motion.span
-              key={i}
-              variants={wordVariant}
-              className="mx-1 bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-200 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+        <div className="mx-auto max-w-7xl px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.35 }}
+            className="mb-10 text-center"
+          >
+            <p className="text-sm font-semibold text-portfolio-accent uppercase tracking-widest mb-3">
+              How I Work
+            </p>
+            <h2
+              id="approach-heading"
+              className="text-3xl sm:text-4xl font-bold text-portfolio-text"
             >
-              {word}
-            </motion.span>
-          ))}
-        </h1>
+              My Engineering Approach
+            </h2>
+          </motion.div>
 
-        {/* Description */}
-        <motion.p
-          variants={fadeUp}
-          custom={0.3}
-          className="text-lg md:text-xl text-yellow-300 mb-10 max-w-3xl leading-relaxed"
-        >
-          {HERO_DESC}
-        </motion.p>
+          <ol className="grid gap-4 md:grid-cols-3">
+            {APPROACH.map(({ step, title, desc }, i) => (
+              <motion.li
+                key={step}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: i * 0.05 }}
+                className="flex flex-col gap-4 rounded-2xl border border-portfolio-border bg-portfolio-panel p-6 transition-all duration-200 hover:-translate-y-1 hover:border-portfolio-accent/30 hover:bg-portfolio-card"
+              >
+                <div
+                  className="text-xs font-bold tracking-[0.16em] text-portfolio-accent-light"
+                  aria-hidden="true"
+                >
+                  {step}
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-portfolio-text mb-2">{title}</h3>
+                  <p className="text-sm text-portfolio-muted leading-relaxed">{desc}</p>
+                </div>
+              </motion.li>
+            ))}
+          </ol>
+        </div>
+      </section>
 
-        {/* Buttons */}
-        <motion.div
-          variants={fadeUp}
-          custom={0.4}
-          className="flex gap-6 justify-center mb-12"
-        >
-          <motion.a
-            whileHover={{
-              scale: 1.08,
-              boxShadow: "0px 0px 25px rgba(59,130,246,0.8)",
-            }}
-            href="/projects"
-            className="px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 rounded-full font-semibold shadow-lg transition-all"
+      <CertificatesSection />
+
+      {/* ── CONTACT ──────────────────────────────────────────────── */}
+      <section
+        id="contact"
+        className="py-16 sm:py-24 bg-portfolio-deep/50"
+        aria-labelledby="contact-heading"
+      >
+        <div className="mx-auto max-w-7xl px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.35 }}
+            className="mb-8 text-center"
           >
-            View Projects
-          </motion.a>
-          <motion.a
-            whileHover={{
-              scale: 1.08,
-              boxShadow: "0px 0px 20px rgba(147,197,253,0.6)",
-            }}
-            href="/about"
-            className="px-8 py-4 border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black rounded-full font-semibold transition-all"
+            <p className="text-sm font-semibold text-portfolio-accent uppercase tracking-widest mb-3">
+              Get In Touch
+            </p>
+            <h2
+              id="contact-heading"
+              className="text-3xl sm:text-4xl font-bold text-portfolio-text mb-4"
+            >
+              Let&apos;s build something useful.
+            </h2>
+            <p className="text-portfolio-muted max-w-xl mx-auto">
+              I&apos;m open to opportunities where I can contribute to frontend development, full-stack engineering, and business application development.
+            </p>
+          </motion.div>
+
+          <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(17rem,0.65fr)] lg:gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35 }}
+            >
+              <ContactForm />
+            </motion.div>
+
+            <aside className="space-y-4" aria-label="Other ways to contact Chandu">
+              <div className="rounded-2xl border border-portfolio-border bg-portfolio-panel p-5 sm:p-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-portfolio-accent">Direct contact</p>
+                <h3 className="mt-2 text-lg font-semibold text-portfolio-text">Prefer another way?</h3>
+                <div className="mt-5 space-y-3">
+                  {[
+                    { icon: Mail, label: 'Email', value: EMAIL, href: `mailto:${EMAIL}` },
+                    { icon: Phone, label: 'Phone', value: '+91 9346347775', href: 'tel:+919346347775' },
+                    { icon: MessageCircle, label: 'WhatsApp', value: 'Message on WhatsApp', href: 'https://wa.me/919346347775' },
+                    { icon: Linkedin, label: 'LinkedIn', value: 'Connect on LinkedIn', href: LINKEDIN_URL },
+                    { icon: Github, label: 'GitHub', value: 'github.com/Chandu-challa', href: GITHUB_URL },
+                  ].map(({ icon: Icon, label, value, href }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target={href.startsWith('http') ? '_blank' : undefined}
+                      rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      className="group flex min-h-11 items-center gap-3 rounded-lg px-2 py-2 text-sm text-portfolio-muted transition-colors hover:bg-portfolio-card hover:text-white focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+                    >
+                      <Icon className="h-4 w-4 shrink-0 text-portfolio-accent-light" aria-hidden="true" />
+                      <span className="min-w-0">
+                        <span className="sr-only">{label}: </span>
+                        <span className="break-all">{value}</span>
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+
+              <a
+                href={RESUME_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-portfolio-border bg-portfolio-card px-5 py-4 text-sm font-semibold text-portfolio-text transition-colors hover:border-portfolio-accent/40 hover:bg-portfolio-accent/[0.05] focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+              >
+                <span className="inline-flex items-center gap-3">
+                  <Download className="h-4 w-4 text-portfolio-accent-light" aria-hidden="true" />
+                  View resume
+                </span>
+                <ExternalLink className="h-4 w-4 text-portfolio-muted" aria-hidden="true" />
+              </a>
+            </aside>
+          </div>
+        </div>
+      </section>
+      </main>
+
+      {/* ── FOOTER ───────────────────────────────────────────────── */}
+      <footer className="border-t border-portfolio-border bg-portfolio-bg" role="contentinfo">
+        <div className="mx-auto max-w-7xl px-6 py-10">
+          <div className="flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
+            <div className="text-center lg:text-left">
+              <p className="text-lg font-bold text-portfolio-text">Chandu Challa<span className="text-portfolio-accent">.</span></p>
+              <p className="mt-1 text-xs text-portfolio-muted">Full Stack Developer · React.js · Next.js · Python · SQL Server</p>
+            </div>
+            <nav aria-label="Footer navigation">
+              <ul className="flex flex-wrap justify-center gap-x-5 gap-y-3" role="list">
+                {NAV_ITEMS.map(({ label, href }) => (
+                  <li key={label}>
+                    <a href={href} className="rounded text-sm text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]">{label}</a>
+                  </li>
+                ))}
+                <li>
+                  <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="rounded text-sm text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]">View Resume</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+
+          <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-portfolio-border pt-6 sm:flex-row">
+            <p className="text-center text-xs text-portfolio-muted sm:text-left">© {new Date().getUTCFullYear()} Chandu Challa. Full Stack Developer.</p>
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-xs">
+              <a href={`mailto:${EMAIL}`} className="break-all text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]">{EMAIL}</a>
+              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" className="rounded text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]">LinkedIn</a>
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" className="rounded text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]">GitHub</a>
+              <a href="#hero" className="inline-flex items-center gap-1 rounded text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]">
+                <ArrowUp className="h-3.5 w-3.5" aria-hidden="true" /> Back to top
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
+      {/* Back to top */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={() => scrollToSection('#hero')}
+            className="fixed bottom-6 right-6 w-11 h-11 rounded-xl bg-portfolio-accent hover:bg-[#4a7aef] text-white flex items-center justify-center shadow-lg shadow-[#5B8CFF]/25 z-40 transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] focus:ring-offset-2 focus:ring-offset-[#080B12]"
+            aria-label="Back to top"
           >
-            About Me
-          </motion.a>
-        </motion.div>
+            <ArrowUp className="w-5 h-5" aria-hidden="true" />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
-        {/* Social Icons */}
-        <motion.div
-          variants={fadeUp}
-          custom={0.5}
-          className="flex gap-8 justify-center"
-        >
-          <SocialIcon
-            href="https://linkedin.com/in/chandu-challa"
-            color="text-blue-400"
-            icon={<FaLinkedin />}
-          />
-          <SocialIcon
-            href="https://github.com/chandu-challa"
-            color="text-gray-300"
-            icon={<FaGithub />}
-          />
-          <SocialIcon
-            href="mailto:chanduchalla@example.com"
-            color="text-green-400"
-            icon={<FaEnvelope />}
-          />
-        </motion.div>
-      </motion.div>
-
-     
+      {/* Case study modal */}
+      <CaseStudyModal
+        project={selectedProject}
+        onClose={closeCaseStudy}
+      />
     </div>
+    </MotionConfig>
   );
-}
-
-// 🔹 Social Icon Component
-function SocialIcon({
-  href,
-  icon,
-  color,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  color: string;
-}) {
-  return (
-    <motion.a
-      whileHover={{ scale: 1.25, rotate: 5 }}
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`text-3xl ${color} transition-all duration-300 p-3 rounded-full bg-white/5 hover:bg-white/10`}
-    >
-      {icon}
-    </motion.a>
-  );
-}
-
-/* 🌈 Tailwind custom animation */
-if (typeof document !== "undefined") {
-  const style = `
-  @keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-  .animate-gradientMove {
-    animation: gradientMove 16s ease infinite;
-  }
-  `;
-  const existing = document.getElementById("gradientMove");
-  if (!existing) {
-    const styleTag = document.createElement("style");
-    styleTag.id = "gradientMove";
-    styleTag.innerHTML = style;
-    document.head.appendChild(styleTag);
-  }
 }
