@@ -80,13 +80,13 @@ export const projects: Project[] = ([
     category: 'Quality Systems',
     filterCategory: 'quality',
     description:
-      'An internal GreenTech Industries application. Screenshots and project files for this system were not available in the portfolio workspace.',
+      'A private quality-system project at GreenTech Industries. Public screen-level details are not available for this application.',
     objective:
-      'Project workflows and the business objective need confirmation before they can be described accurately.',
+      'The public case study is intentionally limited to protect internal company information.',
     confirmedScreens:
-      'No Gauge Management System screenshots or source files were present in the available workspace.',
+      'No screenshots or source files were available in the portfolio materials, so workflow details are not published here.',
     myRole:
-      'The supplied portfolio brief identifies this as one of the six internal applications. Project-specific responsibilities need confirmation.',
+      'The available notes do not identify individual ownership for this system.',
     features: [],
     images: screenshots['gauge-management'] ?? [],
     displayOrder: 6,

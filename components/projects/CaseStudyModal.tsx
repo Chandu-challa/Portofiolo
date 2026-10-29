@@ -92,14 +92,14 @@ export default function CaseStudyModal({ project, onClose }: CaseStudyModalProps
                     onCurrentIndexChange={setActiveImage}
                     className="h-full"
                   />
-                  <span className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#111722] to-transparent" />
+                  <span className="pointer-events-none absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-portfolio-panel to-transparent" />
                 </div>
               ) : (
-                <div className="flex h-44 items-center justify-center bg-gradient-to-br from-[#0D1520] to-[#151D2A] sm:h-52">
+                <div className="flex h-44 items-center justify-center bg-gradient-to-br from-portfolio-deep to-portfolio-panel sm:h-52">
                   <div className="max-w-sm px-6 text-center">
                     <Layers className="mx-auto mb-3 h-8 w-8 text-portfolio-accent" aria-hidden="true" />
-                    <p className="font-semibold text-portfolio-text">No verified screenshots available</p>
-                    <p className="mt-1 text-sm text-portfolio-muted">This project’s details need confirmation.</p>
+                    <p className="font-semibold text-portfolio-text">No public preview available</p>
+                    <p className="mt-1 text-sm text-portfolio-muted">Private project details are limited in this portfolio.</p>
                   </div>
                 </div>
               )}
@@ -107,7 +107,7 @@ export default function CaseStudyModal({ project, onClose }: CaseStudyModalProps
                 ref={closeRef}
                 type="button"
                 onClick={onClose}
-                className="absolute right-3 top-3 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white transition-colors hover:bg-black focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+                className="absolute right-3 top-3 z-20 flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white transition-colors hover:bg-black focus:outline-none focus:ring-2 focus:ring-portfolio-accent"
                 aria-label="Close case study"
               >
                 <X className="h-5 w-5" aria-hidden="true" />
@@ -127,7 +127,7 @@ export default function CaseStudyModal({ project, onClose }: CaseStudyModalProps
                 <h2 id="case-study-title" className="text-xl font-bold text-portfolio-text sm:text-2xl">
                   {project.title}
                 </h2>
-                <p className="mt-2 text-sm leading-relaxed text-portfolio-muted sm:text-base">{project.objective}</p>
+                <p className="mt-2 text-base leading-relaxed text-portfolio-muted">{project.objective}</p>
               </div>
 
               <div className="grid gap-6 sm:grid-cols-2">
@@ -136,14 +136,14 @@ export default function CaseStudyModal({ project, onClose }: CaseStudyModalProps
                     <Layers className="h-4 w-4 text-portfolio-accent" aria-hidden="true" />
                     Confirmed application screens
                   </h3>
-                  <p className="text-sm leading-relaxed text-portfolio-muted">{project.confirmedScreens}</p>
+                  <p className="text-base leading-relaxed text-portfolio-muted">{project.confirmedScreens}</p>
                 </section>
                 <section>
                   <h3 className="mb-2 flex items-center gap-2 text-sm font-semibold text-portfolio-text">
                     <User className="h-4 w-4 text-portfolio-accent" aria-hidden="true" />
                     My role
                   </h3>
-                  <p className="text-sm leading-relaxed text-portfolio-muted">{project.myRole}</p>
+                  <p className="text-base leading-relaxed text-portfolio-muted">{project.myRole}</p>
                 </section>
               </div>
 
@@ -155,7 +155,7 @@ export default function CaseStudyModal({ project, onClose }: CaseStudyModalProps
                   </h3>
                   <ul className="grid gap-2 sm:grid-cols-2">
                     {project.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2 text-sm text-portfolio-muted">
+                      <li key={feature} className="flex items-start gap-2 text-base leading-relaxed text-portfolio-muted">
                         <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-portfolio-accent" aria-hidden="true" />
                         {feature}
                       </li>
@@ -178,7 +178,7 @@ export default function CaseStudyModal({ project, onClose }: CaseStudyModalProps
                         onClick={() => setActiveImage(index)}
                         aria-label={`Show ${image.originalName.replace(/\.[^.]+$/, '').replace(/[_-]+/g, ' ')} screenshot`}
                         aria-pressed={activeImage === index}
-                        className={`relative aspect-video overflow-hidden rounded-lg border bg-portfolio-deep transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] ${
+                        className={`relative aspect-video overflow-hidden rounded-lg border bg-portfolio-deep transition-colors focus:outline-none focus:ring-2 focus:ring-portfolio-accent ${
                           activeImage === index ? 'border-portfolio-accent' : 'border-portfolio-border hover:border-portfolio-accent/50'
                         }`}
                       >
@@ -199,11 +199,11 @@ export default function CaseStudyModal({ project, onClose }: CaseStudyModalProps
               <div className="mt-6 rounded-xl border border-portfolio-border bg-portfolio-deep p-4">
                 <div className="flex items-start gap-3">
                   <Lock className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" aria-hidden="true" />
-                  <div className="space-y-2 text-xs leading-relaxed text-portfolio-muted">
+                  <div className="space-y-2 text-sm leading-relaxed text-portfolio-muted">
                     <p>
                       This is a private enterprise application. The live system and source code are not public.
                     </p>
-                    <p>Screen details are softly blurred to protect employee and operational information.</p>
+                    <p>Employee details and operational records are blurred or omitted from these previews.</p>
                   </div>
                 </div>
               </div>

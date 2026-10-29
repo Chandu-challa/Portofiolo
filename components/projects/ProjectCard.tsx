@@ -15,11 +15,11 @@ interface ProjectCardProps {
 export default function ProjectCard({ project, onViewCaseStudy, index }: ProjectCardProps) {
   return (
     <motion.article
-      initial={{ opacity: 0, y: 30 }}
+      initial={false}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.5, delay: index * 0.08 }}
-      className="group flex flex-col bg-portfolio-card border border-portfolio-border rounded-2xl overflow-hidden hover:border-portfolio-accent/40 hover:shadow-[0_8px_40px_rgba(91,140,255,0.08)] transition-all duration-300"
+      transition={{ duration: 0.32, delay: index * 0.04 }}
+      className="group flex flex-col overflow-hidden rounded-2xl border border-portfolio-border bg-portfolio-card transition-all duration-300 hover:border-portfolio-accent/40 hover:shadow-[0_12px_32px_rgba(0,0,0,0.18)]"
     >
       {/* Screenshot carousel */}
       <div className="relative h-48 overflow-hidden bg-portfolio-deep">
@@ -31,12 +31,12 @@ export default function ProjectCard({ project, onViewCaseStudy, index }: Project
 
         {/* Category badge */}
         <div className="absolute left-3 top-3 z-10 max-w-[90%]">
-          <span className="inline-block px-2.5 py-1 text-xs font-medium rounded-full bg-black/70 backdrop-blur-sm text-portfolio-muted border border-portfolio-border truncate">
+          <span className="inline-block truncate rounded-full border border-white/15 bg-[#0B1220]/90 px-2.5 py-1 text-xs font-medium text-white backdrop-blur-sm">
             {project.category}
           </span>
         </div>
         {project.images.length > 0 && (
-          <span className="absolute right-3 top-3 z-10 rounded-full border border-white/10 bg-black/70 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
+          <span className="absolute right-3 top-3 z-10 rounded-full border border-white/15 bg-[#0B1220]/90 px-2.5 py-1 text-[11px] font-medium text-white backdrop-blur-sm">
             {project.images.length} screen views
           </span>
         )}
@@ -49,7 +49,7 @@ export default function ProjectCard({ project, onViewCaseStudy, index }: Project
           {project.title}
         </h3>
 
-        <p className="text-sm text-portfolio-muted leading-relaxed mb-4 line-clamp-3">
+        <p className="mb-4 line-clamp-3 text-base leading-relaxed text-portfolio-muted">
           {project.description}
         </p>
 
@@ -57,14 +57,14 @@ export default function ProjectCard({ project, onViewCaseStudy, index }: Project
         {project.features.length > 0 ? (
           <ul className="mb-4 space-y-1.5" aria-label="Visible project workflows">
             {project.features.slice(0, 3).map((feature) => (
-              <li key={feature} className="flex items-start gap-2 text-xs text-portfolio-muted">
+              <li key={feature} className="flex items-start gap-2 text-base leading-relaxed text-portfolio-muted">
                 <span className="mt-1.5 h-1 w-1 flex-shrink-0 rounded-full bg-portfolio-accent" aria-hidden="true" />
                 {feature}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="mb-4 text-xs leading-relaxed text-portfolio-muted">Project workflow details need confirmation.</p>
+          <p className="mb-4 text-sm leading-relaxed text-portfolio-muted">Public workflow details are limited for this project.</p>
         )}
 
         {/* Actions */}
@@ -72,7 +72,8 @@ export default function ProjectCard({ project, onViewCaseStudy, index }: Project
           <button
             type="button"
             onClick={() => onViewCaseStudy(project)}
-            className="min-h-11 flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-portfolio-accent/10 hover:bg-portfolio-accent/20 border border-portfolio-accent/30 hover:border-portfolio-accent/50 text-portfolio-accent rounded-xl text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] focus:ring-offset-1 focus:ring-offset-[#151D2A]"
+            aria-label={`View ${project.title} case study`}
+            className="min-h-11 flex-1 flex items-center justify-center gap-2 rounded-xl border border-portfolio-accent/30 bg-portfolio-accent/10 px-4 py-2.5 text-sm font-medium text-portfolio-accent-bright transition-all hover:border-portfolio-accent/50 hover:bg-portfolio-accent/15 focus:outline-none focus:ring-2 focus:ring-portfolio-accent focus:ring-offset-1 focus:ring-offset-portfolio-card"
           >
             <FileText className="w-4 h-4" aria-hidden="true" />
             View case study

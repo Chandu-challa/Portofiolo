@@ -1,6 +1,6 @@
 # Chandu Challa Portfolio
 
-A one-page developer portfolio built with Next.js 16, React 19, TypeScript, Tailwind CSS, Framer Motion, and EmailJS. It presents Chandu Challa’s experience, education, technical skills, certificates, and six private enterprise applications.
+A one-page developer portfolio built with Next.js 16, React 19, TypeScript, Tailwind CSS, Framer Motion, and EmailJS. It presents Chandu Challa’s experience, education, technical skills, certificates, selected public projects, and six private enterprise applications.
 
 ## Run locally
 
@@ -25,9 +25,9 @@ Set the EmailJS template’s **To Email** to `chanduchanduchalla7@gmail.com` and
 
 ## Project screenshots
 
-The site serves only the softly blurred WebP previews in `public/images/project-screenshots/`. Employee and operational details remain obscured. Original enterprise screenshots are preserved in the ignored `.local-private-assets/project-screenshots-original/` folder and are not included in the public site. Five projects with available screenshot evidence appear in the featured work section; the Gauge Management System is omitted until a public-safe preview and verified details are available.
+The site serves optimized WebP previews in `public/images/project-screenshots/`. Employee and operational values are obscured; the first Machine Shop preview is a blank form with no records. Five enterprise systems have screenshot-backed case studies. Gauge Management System is represented without screenshots or unverified workflow claims. Original enterprise screenshots are preserved in the ignored `.local-private-assets/project-screenshots-original/` folder and are not included in the public site.
 
-Project case studies describe workflows visible in the available screenshots. Project-specific implementation stacks, individual module ownership, and code-level challenges are not claimed where supporting source files or notes were unavailable.
+The featured projects section links to CareerGraph, HRMS Lite, and Fake Job Detection. The HRMS frontend depends on a hosted API that may need time to wake up. Enterprise case studies describe only workflows visible in the available screenshots. Project-specific implementation stacks, individual module ownership, and code-level challenges are not claimed where supporting source files or notes were unavailable.
 
 ## Resume and contact
 

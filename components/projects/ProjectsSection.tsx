@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import ProjectCard from '@/components/projects/ProjectCard';
+import FeaturedProjects from '@/components/projects/FeaturedProjects';
 import { projects, type Project, type ProjectCategory } from '@/lib/projectData';
 
 interface ProjectsSectionProps {
   onViewCaseStudy: (project: Project) => void;
 }
 
-const featuredProjects = projects.filter((project) => project.images.length > 0);
+const enterpriseProjects = projects;
 const categoryLabels: Record<ProjectCategory, string> = {
   workflow: 'Workflow',
   quality: 'Quality',
@@ -17,16 +18,17 @@ const categoryLabels: Record<ProjectCategory, string> = {
 };
 const filters: Array<{ label: string; value: ProjectCategory | 'all' }> = [
   { label: 'All projects', value: 'all' },
-  ...(['workflow', 'quality', 'operations'] as const)
-    .filter((category) => featuredProjects.some((project) => project.filterCategory === category))
-    .map((category) => ({ label: categoryLabels[category], value: category })),
+  ...(['workflow', 'quality', 'operations'] as const).map((category) => ({
+    label: categoryLabels[category],
+    value: category,
+  })),
 ];
 
 export default function ProjectsSection({ onViewCaseStudy }: ProjectsSectionProps) {
   const [activeFilter, setActiveFilter] = useState<ProjectCategory | 'all'>('all');
   const filteredProjects = activeFilter === 'all'
-    ? featuredProjects
-    : featuredProjects.filter((project) => project.filterCategory === activeFilter);
+    ? enterpriseProjects
+    : enterpriseProjects.filter((project) => project.filterCategory === activeFilter);
 
   return (
     <section
@@ -34,33 +36,52 @@ export default function ProjectsSection({ onViewCaseStudy }: ProjectsSectionProp
       className="bg-portfolio-deep/50 py-16 sm:py-24"
       aria-labelledby="projects-heading"
     >
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-6xl px-6">
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.35 }}
-          className="mb-8 text-center"
+          transition={{ duration: 0.3 }}
+          className="mb-10 text-center"
         >
           <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-portfolio-accent">Selected work</p>
           <h2 id="projects-heading" className="mb-4 text-3xl font-bold text-portfolio-text sm:text-4xl">
-            Enterprise applications
+            Featured projects
           </h2>
-          <p className="mx-auto max-w-2xl text-sm leading-relaxed text-portfolio-muted sm:text-base">
-            {featuredProjects.length} selected case studies from private company systems. Previews show the interfaces while keeping employee and operational details obscured.
+          <p className="mx-auto max-w-2xl text-base leading-relaxed text-portfolio-muted">
+            Public demos and source code sit alongside carefully limited case studies from private professional work.
           </p>
         </motion.div>
 
-        <div className="mb-8 flex flex-wrap justify-center gap-2" role="group" aria-label="Filter projects by category">
+        <FeaturedProjects />
+
+        <div className="mt-20">
+          <motion.div
+            initial={false}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.3 }}
+            className="mb-8 text-center"
+          >
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-portfolio-accent">Professional work</p>
+            <h3 id="enterprise-projects-heading" className="mb-4 text-3xl font-bold text-portfolio-text sm:text-4xl">
+              Enterprise applications
+            </h3>
+            <p className="mx-auto max-w-2xl text-base leading-relaxed text-portfolio-muted">
+              Six internal systems across workflow, quality, and operations. These case studies omit private records and keep project-specific claims to the available evidence.
+            </p>
+          </motion.div>
+
+        <div className="mb-8 flex flex-wrap justify-center gap-2" role="group" aria-label="Filter enterprise projects by category">
           {filters.map(({ label, value }) => (
             <button
               key={value}
               type="button"
               aria-pressed={activeFilter === value}
               onClick={() => setActiveFilter(value)}
-              className={`min-h-11 rounded-xl px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] ${
+              className={`min-h-11 rounded-xl px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-portfolio-accent ${
                 activeFilter === value
-                  ? 'bg-portfolio-accent text-white'
+                  ? 'bg-portfolio-accent text-[#0B1220]'
                   : 'border border-portfolio-border bg-portfolio-card text-portfolio-muted hover:border-portfolio-accent/40 hover:text-portfolio-text'
               }`}
             >
@@ -85,6 +106,7 @@ export default function ProjectsSection({ onViewCaseStudy }: ProjectsSectionProp
         {filteredProjects.length === 0 && (
           <p className="py-12 text-center text-portfolio-muted">No projects in this category yet.</p>
         )}
+        </div>
       </div>
     </section>
   );

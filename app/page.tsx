@@ -13,8 +13,9 @@ import {
   Database,
   Server,
   GitBranch,
-  Layers,
   Building2,
+  Layers,
+  TrendingUp,
   Calendar,
   ArrowUp,
   Menu,
@@ -22,8 +23,6 @@ import {
   CheckCircle,
   Phone,
   MessageCircle,
-  TrendingUp,
-  ExternalLink,
 } from 'lucide-react';
 import type { Project } from '@/lib/projectData';
 import ProjectsSection from '@/components/projects/ProjectsSection';
@@ -34,13 +33,14 @@ import ContactForm from '@/components/contact/ContactForm';
 // ─── Static data ───────────────────────────────────────────────────────
 const NAV_ITEMS = [
   { label: 'Home', href: '#hero' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Skills', href: '#skills' },
   { label: 'About', href: '#about' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Projects', href: '#projects' },
   { label: 'Certificates', href: '#certificates' },
   { label: 'Contact', href: '#contact' },
 ];
+const SECTION_IDS = NAV_ITEMS.map(({ href }) => href.slice(1));
 
 const RESUME_URL = '/images/Fullstack_developer.pdf';
 const EMAIL = 'chanduchanduchalla7@gmail.com';
@@ -48,25 +48,27 @@ const LINKEDIN_URL = 'https://www.linkedin.com/in/chandu-challa-b91172330/';
 const GITHUB_URL = 'https://github.com/Chandu-challa';
 
 const HIGHLIGHTS = [
+  { label: 'Current Employer', value: 'GreenTech Industries', icon: Building2 },
+  { label: 'Internal Applications', value: '6 enterprise systems', icon: Layers },
+  { label: 'Core Technology Stack', value: 'React · Next.js · Python · SQL Server', icon: Code2 },
+  { label: 'Career Progression', value: 'Intern → Full Stack Developer', icon: TrendingUp },
+];
+
+const APPROACH = [
   {
-    label: 'Current Employer',
-    value: 'GreenTech Industries',
-    icon: Building2,
+    step: '01',
+    title: 'Understand the workflow',
+    desc: 'Clarify the business need and map the steps people need to complete.',
   },
   {
-    label: 'Internal Applications',
-    value: '6 enterprise systems',
-    icon: Layers,
+    step: '02',
+    title: 'Build the interface and integration',
+    desc: 'Create responsive UI, connect APIs and database operations, and handle validation and permissions.',
   },
   {
-    label: 'Core Technology Stack',
-    value: 'React · Next.js · Python · SQL Server',
-    icon: Code2,
-  },
-  {
-    label: 'Career Progression',
-    value: 'Intern → Full Stack Developer',
-    icon: TrendingUp,
+    step: '03',
+    title: 'Verify and maintain',
+    desc: 'Test complete workflows, resolve issues, and support the application as requirements evolve.',
   },
 ];
 
@@ -74,7 +76,7 @@ const SKILLS = [
   {
     title: 'Frontend',
     icon: Code2,
-    color: '#5B8CFF',
+    color: '#60A5FA',
     skills: [
       'React.js',
       'Next.js',
@@ -88,9 +90,10 @@ const SKILLS = [
   {
     title: 'Backend',
     icon: Server,
-    color: '#8B7CFF',
+    color: '#60A5FA',
     skills: [
       'Python',
+      'Django',
       'FastAPI',
       'REST APIs',
       'JWT Authentication',
@@ -100,7 +103,7 @@ const SKILLS = [
   {
     title: 'Database',
     icon: Database,
-    color: '#5B8CFF',
+    color: '#60A5FA',
     skills: [
       'Microsoft SQL Server',
       'T-SQL',
@@ -113,7 +116,7 @@ const SKILLS = [
   {
     title: 'Development Practices',
     icon: GitBranch,
-    color: '#8B7CFF',
+    color: '#60A5FA',
     skills: [
       'API Integration',
       'Form Validation',
@@ -151,24 +154,6 @@ const EXPERIENCE = [
       'Worked with SQL Server queries, stored procedures, and data validation',
       'Debugged and maintained existing applications with the development team',
     ],
-  },
-];
-
-const APPROACH = [
-  {
-    step: '01',
-    title: 'Understand the workflow',
-    desc: 'Clarify the business need and map the steps people need to complete.',
-  },
-  {
-    step: '02',
-    title: 'Build the interface and integration',
-    desc: 'Create responsive UI, connect APIs and database operations, and handle validation and permissions.',
-  },
-  {
-    step: '03',
-    title: 'Verify and maintain',
-    desc: 'Test complete workflows, resolve issues, and support the application as requirements evolve.',
   },
 ];
 
@@ -223,6 +208,7 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const mobileToggleRef = useRef<HTMLButtonElement>(null);
+  const pendingMobileSectionRef = useRef<string | null>(null);
   const closeCaseStudy = useCallback(() => setSelectedProject(null), []);
 
   // Scroll tracking
@@ -238,7 +224,6 @@ export default function Home() {
 
   // Section observer
   useEffect(() => {
-    const sectionIds = NAV_ITEMS.map((n) => n.href.replace('#', ''));
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -247,7 +232,7 @@ export default function Home() {
       },
       { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
     );
-    sectionIds.forEach((id) => {
+    SECTION_IDS.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
@@ -269,6 +254,14 @@ export default function Home() {
     };
   }, [mobileOpen]);
 
+  useEffect(() => {
+    if (mobileOpen || !pendingMobileSectionRef.current) return;
+    const href = pendingMobileSectionRef.current;
+    pendingMobileSectionRef.current = null;
+    const frame = window.requestAnimationFrame(() => scrollToSection(href));
+    return () => window.cancelAnimationFrame(frame);
+  }, [mobileOpen]);
+
   // ─── Render ──────────────────────────────────────────────────────────
   return (
     <MotionConfig reducedMotion="user">
@@ -287,22 +280,23 @@ export default function Home() {
       >
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-portfolio-accent focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:outline-none"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-portfolio-accent focus:text-[#0B1220] focus:px-4 focus:py-2 focus:rounded-lg focus:outline-none"
         >
           Skip to content
         </a>
 
         <nav
-          className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
+          className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between"
           aria-label="Primary navigation"
         >
           {/* Brand */}
           <a
             href="#hero"
-            className="text-xl font-bold text-portfolio-text hover:text-portfolio-accent transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] rounded"
+            className="inline-flex items-center gap-2 rounded text-base font-bold text-portfolio-text transition-colors hover:text-portfolio-accent focus:outline-none focus:ring-2 focus:ring-portfolio-accent sm:text-lg"
             aria-label="Chandu Challa, home"
           >
-            Chandu<span className="text-portfolio-accent">.</span>
+            <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-portfolio-accent text-sm font-extrabold text-[#0B1220]">CC.</span>
+            <span>Chandu Challa</span>
           </a>
 
           {/* Desktop nav links */}
@@ -313,7 +307,7 @@ export default function Home() {
                 <li key={label}>
                   <a
                     href={href}
-                    className={`relative text-sm font-medium transition-colors pb-0.5 focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] rounded ${
+                    className={`relative rounded pb-0.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-portfolio-accent ${
                       isActive
                         ? 'text-portfolio-accent'
                         : 'text-portfolio-muted hover:text-portfolio-text'
@@ -324,7 +318,7 @@ export default function Home() {
                     {isActive && (
                       <motion.span
                         layoutId="nav-underline"
-                        className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-portfolio-accent rounded-full"
+                        className="absolute -bottom-0.5 left-0 right-0 h-[2px] rounded-full bg-portfolio-accent"
                       />
                     )}
                   </a>
@@ -336,18 +330,17 @@ export default function Home() {
           {/* Resume button */}
           <a
             href={RESUME_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden xl:flex items-center gap-2 px-4 py-2 bg-portfolio-accent hover:bg-[#4a7aef] text-white text-sm font-semibold rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] focus:ring-offset-2 focus:ring-offset-[#080B12]"
+            download="Chandu-Challa-Resume.pdf"
+            className="hidden xl:flex items-center gap-2 rounded-xl bg-portfolio-accent px-4 py-2 text-sm font-semibold text-[#0B1220] transition-colors hover:bg-portfolio-accent-light focus:outline-none focus:ring-2 focus:ring-portfolio-accent focus:ring-offset-2 focus:ring-offset-portfolio-bg"
           >
             <Download className="w-3.5 h-3.5" aria-hidden="true" />
-            View Resume
+            Download Resume
           </a>
 
           {/* Mobile hamburger */}
           <button
             ref={mobileToggleRef}
-            className="xl:hidden p-2 rounded-lg text-portfolio-muted hover:text-white hover:bg-portfolio-card transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg p-2 text-portfolio-muted transition-colors hover:bg-portfolio-card hover:text-portfolio-accent focus:outline-none focus:ring-2 focus:ring-portfolio-accent xl:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={mobileOpen}
@@ -389,7 +382,7 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={() => setMobileOpen(false)}
-                    className="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm text-portfolio-muted hover:bg-portfolio-card hover:text-white focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+                    className="inline-flex min-h-11 items-center gap-2 rounded-lg px-3 text-sm text-portfolio-muted hover:bg-portfolio-card hover:text-portfolio-accent focus:outline-none focus:ring-2 focus:ring-portfolio-accent"
                     aria-label="Close navigation menu"
                   >
                     <XIcon className="h-4 w-4" aria-hidden="true" />
@@ -403,9 +396,14 @@ export default function Home() {
                       <li key={label}>
                         <a
                           href={href}
-                          onClick={() => setMobileOpen(false)}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            pendingMobileSectionRef.current = href;
+                            window.history.pushState(null, '', href);
+                            setMobileOpen(false);
+                          }}
                           aria-current={isActive ? 'location' : undefined}
-                          className={`flex min-h-11 w-full items-center rounded-xl px-4 py-3 text-left text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] ${
+                          className={`flex min-h-11 w-full items-center rounded-xl px-4 py-3 text-left text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-portfolio-accent ${
                             isActive
                               ? 'bg-portfolio-accent/10 text-portfolio-accent-bright'
                               : 'text-portfolio-muted hover:bg-portfolio-card hover:text-portfolio-text'
@@ -420,13 +418,12 @@ export default function Home() {
                 <div className="px-6 pb-5">
                   <a
                     href={RESUME_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-portfolio-accent px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#4a7aef] focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+                    download="Chandu-Challa-Resume.pdf"
+                    className="flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-portfolio-accent px-4 py-3 text-sm font-semibold text-[#0B1220] transition-colors hover:bg-portfolio-accent-light focus:outline-none focus:ring-2 focus:ring-portfolio-accent"
                     onClick={() => setMobileOpen(false)}
                   >
                     <Download className="h-4 w-4" aria-hidden="true" />
-                    View Resume
+                    Download Resume
                   </a>
                 </div>
                 </motion.div>
@@ -441,62 +438,56 @@ export default function Home() {
       {/* ── HERO ─────────────────────────────────────────────────── */}
       <section
         id="hero"
-        className="relative flex min-h-[88svh] items-center overflow-hidden pb-16 pt-28 sm:pt-32"
+        className="relative flex min-h-[82svh] items-center overflow-hidden pb-16 pt-28 sm:pt-32"
         aria-labelledby="hero-heading"
       >
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-          <div className="absolute -right-40 top-12 h-[32rem] w-[32rem] rounded-full bg-portfolio-accent/[0.07] blur-[110px]" />
-          <div className="absolute inset-0 opacity-[0.025]" style={{
-            backgroundImage: 'linear-gradient(#5B8CFF 1px, transparent 1px), linear-gradient(90deg, #5B8CFF 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }} />
+          <div className="absolute right-[8%] top-20 h-[28rem] w-[28rem] rounded-full bg-portfolio-accent/[0.06] blur-[100px]" />
         </div>
 
-        <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-12 px-6 lg:grid-cols-[1.12fr_0.88fr] lg:gap-16">
+        <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1.12fr_0.88fr] lg:gap-16">
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45 }}
+            transition={{ duration: 0.32 }}
           >
-            <p className="mb-6 inline-flex items-center gap-2 rounded-full border border-portfolio-accent/25 bg-portfolio-accent/[0.08] px-4 py-2 text-xs font-semibold tracking-[0.08em] text-[#AFC3FF] sm:text-sm">
-              FULL STACK DEVELOPER <span className="text-portfolio-accent" aria-hidden="true">·</span> ENTERPRISE WEB APPLICATIONS
+            <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-portfolio-accent/25 bg-portfolio-accent/[0.08] px-4 py-2 text-xs font-semibold tracking-[0.08em] text-portfolio-accent-light sm:text-sm">
+              FULL STACK DEVELOPER
             </p>
-            <p className="mb-3 text-sm font-medium text-portfolio-muted">I&apos;m Chandu Challa</p>
-            <h1 id="hero-heading" className="max-w-3xl text-[2.55rem] font-bold leading-[1.08] tracking-tight text-portfolio-text sm:text-5xl xl:text-[3.65rem]">
-              Building reliable web applications that solve{' '}
-              <span className="bg-gradient-to-r from-[#78A0FF] to-[#A99AFF] bg-clip-text text-transparent">real business problems.</span>
+            <p className="mb-3 text-base font-medium text-portfolio-muted">Chandu Challa</p>
+            <h1 id="hero-heading" className="max-w-3xl text-[2.55rem] font-bold leading-[1.08] tracking-tight text-portfolio-text sm:text-5xl xl:text-[3.5rem]">
+              Full Stack Developer building scalable,{' '}
+              <span className="text-portfolio-accent">business-focused web applications.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-7 text-portfolio-muted sm:text-lg sm:leading-8">
-              I&apos;m a Full Stack Developer at <span className="font-medium text-portfolio-text">GreenTech Industries</span>, building business applications with React.js, Next.js, Python, FastAPI, and SQL Server.
+              At GreenTech Industries, I build responsive interfaces and reliable backend services using React, Next.js, Python, FastAPI, and SQL Server.
             </p>
 
-            <div className="mt-6 flex flex-wrap gap-2" aria-label="Core technologies">
-              {['React.js', 'Next.js', 'TypeScript', 'Python', 'FastAPI', 'SQL Server'].map((tech) => (
-                <span key={tech} className="rounded-lg border border-portfolio-border bg-portfolio-panel/80 px-3 py-1.5 text-xs font-medium text-[#C6D0DE] sm:text-sm">{tech}</span>
-              ))}
-            </div>
+            <p className="mt-5 text-sm font-medium tracking-wide text-portfolio-muted sm:text-base">
+              React.js <span className="px-1.5 text-portfolio-accent" aria-hidden="true">·</span> Next.js <span className="px-1.5 text-portfolio-accent" aria-hidden="true">·</span> TypeScript <span className="px-1.5 text-portfolio-accent" aria-hidden="true">·</span> Python <span className="px-1.5 text-portfolio-accent" aria-hidden="true">·</span> SQL Server
+            </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a href="#projects" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-portfolio-accent px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#5B8CFF]/15 transition-colors hover:bg-[#4a7aef] focus:outline-none focus:ring-2 focus:ring-[#8EACFF] focus:ring-offset-2 focus:ring-offset-[#080B12]">
-                Explore My Projects
+              <a href="#projects" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-portfolio-accent px-5 py-3 text-sm font-semibold text-[#0B1220] transition-colors hover:bg-portfolio-accent-light focus:outline-none focus:ring-2 focus:ring-portfolio-accent focus:ring-offset-2 focus:ring-offset-portfolio-bg">
+                View My Projects
               </a>
-              <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-portfolio-border bg-portfolio-panel/70 px-5 py-3 text-sm font-semibold text-portfolio-text transition-colors hover:border-portfolio-accent/50 hover:bg-portfolio-card focus:outline-none focus:ring-2 focus:ring-[#8EACFF]">
-                <Download className="h-4 w-4" aria-hidden="true" /> View Resume
+              <a href={RESUME_URL} download="Chandu-Challa-Resume.pdf" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-portfolio-border bg-portfolio-panel px-5 py-3 text-sm font-semibold text-portfolio-text transition-colors hover:border-portfolio-accent/50 hover:bg-portfolio-card focus:outline-none focus:ring-2 focus:ring-portfolio-accent">
+                <Download className="h-4 w-4" aria-hidden="true" /> Download Resume
               </a>
-              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center gap-2 rounded-xl px-3 py-3 text-sm font-medium text-portfolio-muted transition-colors hover:text-portfolio-text focus:outline-none focus:ring-2 focus:ring-[#8EACFF]">
+              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center gap-2 rounded-xl px-3 py-3 text-sm font-medium text-portfolio-muted transition-colors hover:text-portfolio-text focus:outline-none focus:ring-2 focus:ring-portfolio-accent">
                 <Linkedin className="h-4 w-4" aria-hidden="true" /> Connect on LinkedIn
               </a>
             </div>
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            transition={{ duration: 0.35, delay: 0.08 }}
             className="relative mx-auto w-full max-w-[27rem] lg:mr-2"
           >
-            <div className="absolute -inset-5 rounded-[2rem] bg-gradient-to-br from-portfolio-accent/20 via-transparent to-portfolio-violet/15 blur-2xl" aria-hidden="true" />
-            <div className="relative aspect-[4/4.5] overflow-hidden rounded-[1.7rem] border border-portfolio-border bg-portfolio-panel shadow-2xl shadow-black/30">
+            <div className="absolute -inset-4 rounded-2xl bg-portfolio-accent/[0.06] blur-2xl" aria-hidden="true" />
+            <div className="relative aspect-[4/4.5] overflow-hidden rounded-2xl border border-portfolio-border bg-portfolio-panel shadow-xl shadow-black/20">
               <Image
                 src="/images/chandu1.png"
                 alt="Chandu Challa, Full Stack Developer"
@@ -505,9 +496,9 @@ export default function Home() {
                 sizes="(max-width: 1024px) 80vw, 420px"
                 className="object-cover object-center"
               />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#080B12] via-[#080B12]/80 to-transparent px-5 pb-5 pt-16 sm:px-6 sm:pb-6">
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0B1220] via-[#0B1220]/85 to-transparent px-5 pb-5 pt-16 sm:px-6 sm:pb-6">
                 <p className="text-lg font-semibold text-white">Chandu Challa</p>
-                <p className="mt-1 text-sm text-[#CAD4E3]">Full Stack Developer · GreenTech Industries</p>
+                <p className="mt-1 text-sm text-white/85">Full Stack Developer · GreenTech Industries</p>
               </div>
             </div>
             <div className="absolute -left-4 top-7 hidden rounded-xl border border-portfolio-border bg-portfolio-panel/95 px-4 py-3 shadow-xl sm:block">
@@ -519,29 +510,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── HIGHLIGHTS STRIP ─────────────────────────────────────── */}
+      {/* ── PROFESSIONAL HIGHLIGHTS ──────────────────────────────── */}
       <section
-        className="py-12 border-y border-portfolio-border bg-portfolio-deep/60"
+        className="border-y border-portfolio-border bg-portfolio-deep/60 py-10 sm:py-12"
         aria-label="Professional highlights"
       >
-        <div className="max-w-7xl mx-auto px-6">
-          <dl className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {HIGHLIGHTS.map(({ label, value, icon: Icon }, i) => (
+        <div className="mx-auto max-w-6xl px-6">
+          <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {HIGHLIGHTS.map(({ label, value, icon: Icon }) => (
               <motion.div
                 key={label}
-                initial={{ opacity: 0, y: 20 }}
+                initial={false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-                className="flex items-start gap-4 p-5 rounded-2xl bg-portfolio-card border border-portfolio-border hover:border-portfolio-accent/30 transition-colors"
+                transition={{ duration: 0.3 }}
+                className="flex items-start gap-4 rounded-2xl border border-portfolio-border bg-portfolio-card p-5 transition-colors hover:border-portfolio-accent/30"
               >
-                <div className="w-10 h-10 rounded-xl bg-portfolio-accent/10 flex items-center justify-center flex-shrink-0">
-                  <Icon className="w-5 h-5 text-portfolio-accent" aria-hidden="true" />
-                </div>
-                <div>
-                  <dt className="text-xs text-portfolio-muted mb-1">{label}</dt>
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-portfolio-accent/10">
+                  <Icon className="h-5 w-5 text-portfolio-accent" aria-hidden="true" />
+                </span>
+                <span>
+                  <dt className="mb-1 text-xs text-portfolio-muted">{label}</dt>
                   <dd className="text-sm font-semibold text-portfolio-text">{value}</dd>
-                </div>
+                </span>
               </motion.div>
             ))}
           </dl>
@@ -558,7 +549,7 @@ export default function Home() {
       >
         <div className="max-w-4xl mx-auto px-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center mb-12"
@@ -577,7 +568,7 @@ export default function Home() {
           <div className="relative">
             {/* Timeline line */}
             <div
-              className="absolute left-[19px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-portfolio-accent to-[#293548] hidden sm:block"
+              className="absolute left-[19px] top-6 bottom-6 w-[2px] bg-gradient-to-b from-portfolio-accent to-portfolio-border hidden sm:block"
               aria-hidden="true"
             />
 
@@ -585,10 +576,10 @@ export default function Home() {
               {EXPERIENCE.map((job, i) => (
                 <motion.li
                   key={job.title + job.dates}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={false}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  transition={{ duration: 0.32, delay: i * 0.05 }}
                   className="relative sm:pl-12"
                 >
                   {/* Timeline dot */}
@@ -601,7 +592,7 @@ export default function Home() {
                     aria-hidden="true"
                   >
                     <Building2
-                      className={`w-4 h-4 ${job.isCurrent ? 'text-white' : 'text-portfolio-muted'}`}
+                      className={`w-4 h-4 ${job.isCurrent ? 'text-[#0B1220]' : 'text-portfolio-muted'}`}
                     />
                   </div>
 
@@ -614,7 +605,7 @@ export default function Home() {
                             className={`px-2.5 py-0.5 text-xs font-medium rounded-full ${
                               job.isCurrent
                                 ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/25'
-                                : 'bg-[#293548] text-portfolio-muted border border-portfolio-border'
+                                : 'bg-portfolio-deep text-portfolio-muted border border-portfolio-border'
                             }`}
                           >
                             {job.type}
@@ -635,7 +626,7 @@ export default function Home() {
                       {job.responsibilities.map((r, ri) => (
                         <li
                           key={ri}
-                          className="flex items-start gap-2 text-sm text-portfolio-muted"
+                          className="flex items-start gap-2 text-base leading-relaxed text-portfolio-muted"
                         >
                           <CheckCircle
                             className="w-3.5 h-3.5 text-portfolio-accent flex-shrink-0 mt-0.5"
@@ -659,9 +650,9 @@ export default function Home() {
         className="py-16 sm:py-24 bg-portfolio-deep/50"
         aria-labelledby="skills-heading"
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-6xl mx-auto px-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="text-center mb-12"
@@ -681,11 +672,11 @@ export default function Home() {
             {SKILLS.map(({ title, icon: Icon, color, skills }, i) => (
               <motion.div
                 key={title}
-                initial={{ opacity: 0, y: 30 }}
+                initial={false}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="p-6 rounded-2xl bg-portfolio-card border border-portfolio-border hover:border-portfolio-accent/30 hover:shadow-[0_8px_30px_rgba(91,140,255,0.06)] transition-all"
+                transition={{ duration: 0.32, delay: i * 0.05 }}
+                className="p-6 rounded-2xl bg-portfolio-card border border-portfolio-border hover:border-portfolio-accent/30 hover:shadow-[0_8px_30px_rgba(96,165,250,0.08)] transition-all"
               >
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center mb-4"
@@ -698,7 +689,7 @@ export default function Home() {
                   {skills.map((skill) => (
                     <li
                       key={skill}
-                      className="flex items-center gap-2 text-sm text-portfolio-muted"
+                      className="flex items-center gap-2 text-base text-portfolio-muted"
                     >
                       <span
                         className="w-1 h-1 rounded-full flex-shrink-0"
@@ -721,32 +712,32 @@ export default function Home() {
         className="py-16 sm:py-24"
         aria-labelledby="about-heading"
       >
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-6xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Education and focus card */}
             <motion.div
-              initial={{ opacity: 0, x: -40 }}
+              initial={false}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.35 }}
               className="flex justify-center lg:justify-start"
             >
-              <div className="w-full max-w-xl rounded-3xl border border-portfolio-border bg-portfolio-panel p-6 sm:p-8">
+              <div className="w-full max-w-xl rounded-2xl border border-portfolio-border bg-portfolio-panel p-6 sm:p-8">
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-portfolio-accent">Education</p>
                 <p className="mt-4 text-2xl font-semibold leading-snug text-portfolio-text">B.Tech in Artificial Intelligence and Data Science</p>
                 <p className="mt-3 text-sm leading-relaxed text-portfolio-muted">NBKR Institute of Science and Technology · Graduated 2025</p>
-                <div className="my-7 h-px bg-[#293548]" />
+                <div className="my-7 h-px bg-portfolio-border" />
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-portfolio-accent">Focus</p>
-                <p className="mt-3 text-base font-medium leading-relaxed text-[#E5EAF3]">Enterprise applications, business workflows, and data-driven systems.</p>
+                <p className="mt-3 text-base font-medium leading-relaxed text-portfolio-text">Enterprise applications, business workflows, and data-driven systems.</p>
               </div>
             </motion.div>
 
             {/* Text */}
             <motion.div
-              initial={{ opacity: 0, x: 40 }}
+              initial={false}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
+              transition={{ duration: 0.35, delay: 0.05 }}
             >
               <p className="text-sm font-semibold text-portfolio-accent uppercase tracking-widest mb-3">
                 About Me
@@ -757,7 +748,7 @@ export default function Home() {
               >
                 More than interfaces — I build complete business applications.
               </h2>
-              <div className="space-y-4 text-portfolio-muted leading-relaxed">
+              <div className="space-y-4 text-base text-portfolio-muted leading-relaxed">
                 <p>
                   I&apos;m a Full Stack Developer at <strong className="text-portfolio-text">GreenTech Industries</strong>, building business applications with React.js, Next.js, Python, FastAPI, and SQL Server.
                 </p>
@@ -769,16 +760,15 @@ export default function Home() {
               <div className="mt-7 flex flex-wrap gap-3">
                 <a
                   href={RESUME_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-2.5 bg-portfolio-accent hover:bg-[#4a7aef] text-white font-semibold rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] focus:ring-offset-2 focus:ring-offset-[#080B12]"
+                  download="Chandu-Challa-Resume.pdf"
+                  className="flex min-h-11 items-center gap-2 rounded-xl bg-portfolio-accent px-5 py-2.5 font-semibold text-[#0B1220] transition-colors hover:bg-portfolio-accent-light focus:outline-none focus:ring-2 focus:ring-portfolio-accent focus:ring-offset-2 focus:ring-offset-portfolio-bg"
                 >
                   <Download className="w-4 h-4" aria-hidden="true" />
-                  View Resume
+                  Download Resume
                 </a>
                 <button
                   onClick={() => scrollToSection('#contact')}
-                  className="flex items-center gap-2 px-5 py-2.5 border border-portfolio-border hover:border-portfolio-accent/40 text-portfolio-muted hover:text-portfolio-text rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+                  className="flex min-h-11 items-center gap-2 rounded-xl border border-portfolio-border px-5 py-2.5 text-portfolio-muted transition-all hover:border-portfolio-accent/40 hover:text-portfolio-accent focus:outline-none focus:ring-2 focus:ring-portfolio-accent"
                 >
                   <Mail className="w-4 h-4" aria-hidden="true" />
                   Contact Me
@@ -790,48 +780,34 @@ export default function Home() {
       </section>
 
       {/* ── ENGINEERING APPROACH ─────────────────────────────────── */}
-      <section
-        className="py-16 sm:py-24"
-        aria-labelledby="approach-heading"
-      >
-        <div className="mx-auto max-w-7xl px-6">
+      <section className="py-16 sm:py-24" aria-labelledby="approach-heading">
+        <div className="mx-auto max-w-6xl px-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.35 }}
+            transition={{ duration: 0.3 }}
             className="mb-10 text-center"
           >
-            <p className="text-sm font-semibold text-portfolio-accent uppercase tracking-widest mb-3">
-              How I Work
-            </p>
-            <h2
-              id="approach-heading"
-              className="text-3xl sm:text-4xl font-bold text-portfolio-text"
-            >
+            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-portfolio-accent">How I Work</p>
+            <h2 id="approach-heading" className="text-3xl font-bold text-portfolio-text sm:text-4xl">
               My Engineering Approach
             </h2>
           </motion.div>
-
           <ol className="grid gap-4 md:grid-cols-3">
-            {APPROACH.map(({ step, title, desc }, i) => (
+            {APPROACH.map(({ step, title, desc }) => (
               <motion.li
                 key={step}
-                initial={{ opacity: 0, x: -20 }}
+                initial={false}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: i * 0.05 }}
+                transition={{ duration: 0.25 }}
                 className="flex flex-col gap-4 rounded-2xl border border-portfolio-border bg-portfolio-panel p-6 transition-all duration-200 hover:-translate-y-1 hover:border-portfolio-accent/30 hover:bg-portfolio-card"
               >
-                <div
-                  className="text-xs font-bold tracking-[0.16em] text-portfolio-accent-light"
-                  aria-hidden="true"
-                >
-                  {step}
-                </div>
+                <span className="text-xs font-bold tracking-[0.16em] text-portfolio-accent-light" aria-hidden="true">{step}</span>
                 <div>
-                  <h3 className="text-base font-bold text-portfolio-text mb-2">{title}</h3>
-                  <p className="text-sm text-portfolio-muted leading-relaxed">{desc}</p>
+                  <h3 className="mb-2 text-base font-bold text-portfolio-text">{title}</h3>
+                  <p className="text-sm leading-relaxed text-portfolio-muted">{desc}</p>
                 </div>
               </motion.li>
             ))}
@@ -847,9 +823,9 @@ export default function Home() {
         className="py-16 sm:py-24 bg-portfolio-deep/50"
         aria-labelledby="contact-heading"
       >
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-6xl px-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.35 }}
@@ -864,14 +840,14 @@ export default function Home() {
             >
               Let&apos;s build something useful.
             </h2>
-            <p className="text-portfolio-muted max-w-xl mx-auto">
+            <p className="mx-auto max-w-xl text-base leading-relaxed text-portfolio-muted">
               I&apos;m open to opportunities where I can contribute to frontend development, full-stack engineering, and business application development.
             </p>
           </motion.div>
 
           <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(17rem,0.65fr)] lg:gap-8">
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.35 }}
@@ -896,7 +872,7 @@ export default function Home() {
                       href={href}
                       target={href.startsWith('http') ? '_blank' : undefined}
                       rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      className="group flex min-h-11 items-center gap-3 rounded-lg px-2 py-2 text-sm text-portfolio-muted transition-colors hover:bg-portfolio-card hover:text-white focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+                      className="group flex min-h-11 items-center gap-3 rounded-lg px-2 py-2 text-base text-portfolio-muted transition-colors hover:bg-portfolio-card hover:text-portfolio-accent focus:outline-none focus:ring-2 focus:ring-portfolio-accent"
                     >
                       <Icon className="h-4 w-4 shrink-0 text-portfolio-accent-light" aria-hidden="true" />
                       <span className="min-w-0">
@@ -910,15 +886,14 @@ export default function Home() {
 
               <a
                 href={RESUME_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-portfolio-border bg-portfolio-card px-5 py-4 text-sm font-semibold text-portfolio-text transition-colors hover:border-portfolio-accent/40 hover:bg-portfolio-accent/[0.05] focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+                download="Chandu-Challa-Resume.pdf"
+                className="flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-portfolio-border bg-portfolio-card px-5 py-4 text-base font-semibold text-portfolio-text transition-colors hover:border-portfolio-accent/40 hover:bg-portfolio-accent/[0.05] focus:outline-none focus:ring-2 focus:ring-portfolio-accent"
               >
                 <span className="inline-flex items-center gap-3">
                   <Download className="h-4 w-4 text-portfolio-accent-light" aria-hidden="true" />
-                  View resume
+                  Download resume
                 </span>
-                <ExternalLink className="h-4 w-4 text-portfolio-muted" aria-hidden="true" />
+                <span className="text-xs font-medium text-portfolio-muted">PDF</span>
               </a>
             </aside>
           </div>
@@ -928,7 +903,7 @@ export default function Home() {
 
       {/* ── FOOTER ───────────────────────────────────────────────── */}
       <footer className="border-t border-portfolio-border bg-portfolio-bg" role="contentinfo">
-        <div className="mx-auto max-w-7xl px-6 py-10">
+        <div className="mx-auto max-w-6xl px-6 py-10">
           <div className="flex flex-col gap-7 lg:flex-row lg:items-center lg:justify-between">
             <div className="text-center lg:text-left">
               <p className="text-lg font-bold text-portfolio-text">Chandu Challa<span className="text-portfolio-accent">.</span></p>
@@ -938,11 +913,11 @@ export default function Home() {
               <ul className="flex flex-wrap justify-center gap-x-5 gap-y-3" role="list">
                 {NAV_ITEMS.map(({ label, href }) => (
                   <li key={label}>
-                    <a href={href} className="rounded text-sm text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]">{label}</a>
+                    <a href={href} className="rounded text-sm text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-portfolio-accent">{label}</a>
                   </li>
                 ))}
                 <li>
-                  <a href={RESUME_URL} target="_blank" rel="noopener noreferrer" className="rounded text-sm text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]">View Resume</a>
+                  <a href={RESUME_URL} download="Chandu-Challa-Resume.pdf" className="rounded text-sm text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-portfolio-accent">Download Resume</a>
                 </li>
               </ul>
             </nav>
@@ -951,10 +926,14 @@ export default function Home() {
           <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t border-portfolio-border pt-6 sm:flex-row">
             <p className="text-center text-xs text-portfolio-muted sm:text-left">© {new Date().getUTCFullYear()} Chandu Challa. Full Stack Developer.</p>
             <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-3 text-xs">
-              <a href={`mailto:${EMAIL}`} className="break-all text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]">{EMAIL}</a>
-              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" className="rounded text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]">LinkedIn</a>
-              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" className="rounded text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]">GitHub</a>
-              <a href="#hero" className="inline-flex items-center gap-1 rounded text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]">
+              <a href={`mailto:${EMAIL}`} className="break-all text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-portfolio-accent">{EMAIL}</a>
+              <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile" className="inline-flex items-center gap-1.5 rounded text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-portfolio-accent">
+                <Linkedin className="h-3.5 w-3.5" aria-hidden="true" /> LinkedIn
+              </a>
+              <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub profile" className="inline-flex items-center gap-1.5 rounded text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-portfolio-accent">
+                <Github className="h-3.5 w-3.5" aria-hidden="true" /> GitHub
+              </a>
+              <a href="#hero" className="inline-flex items-center gap-1 rounded text-portfolio-muted transition-colors hover:text-portfolio-accent-bright focus:outline-none focus:ring-2 focus:ring-portfolio-accent">
                 <ArrowUp className="h-3.5 w-3.5" aria-hidden="true" /> Back to top
               </a>
             </div>
@@ -969,7 +948,7 @@ export default function Home() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => scrollToSection('#hero')}
-            className="fixed bottom-6 right-6 w-11 h-11 rounded-xl bg-portfolio-accent hover:bg-[#4a7aef] text-white flex items-center justify-center shadow-lg shadow-[#5B8CFF]/25 z-40 transition-colors focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] focus:ring-offset-2 focus:ring-offset-[#080B12]"
+            className="fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-xl bg-portfolio-accent text-[#0B1220] shadow-lg shadow-portfolio-accent/20 transition-colors hover:bg-portfolio-accent-light focus:outline-none focus:ring-2 focus:ring-portfolio-accent focus:ring-offset-2 focus:ring-offset-portfolio-bg"
             aria-label="Back to top"
           >
             <ArrowUp className="w-5 h-5" aria-hidden="true" />

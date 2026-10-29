@@ -49,8 +49,8 @@ export default function ScreenshotCarousel({
       <div className={`relative flex items-center justify-center bg-portfolio-deep ${className}`}>
         <div className="max-w-xs px-6 text-center">
           <Monitor className="mx-auto mb-3 h-8 w-8 text-portfolio-accent/60" aria-hidden="true" />
-          <p className="text-sm font-medium text-portfolio-text">No project screenshots available</p>
-          <p className="mt-1 text-xs text-portfolio-muted">Project details need confirmation.</p>
+          <p className="text-sm font-medium text-portfolio-text">No public preview available</p>
+          <p className="mt-1 text-xs text-portfolio-muted">Private project details are limited in this portfolio.</p>
         </div>
       </div>
     );
@@ -91,7 +91,6 @@ export default function ScreenshotCarousel({
             src={images[current].src}
             alt={images[current].alt}
             fill
-            priority={current === 0}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-contain"
           />
@@ -103,7 +102,7 @@ export default function ScreenshotCarousel({
           <button
             type="button"
             onClick={previous}
-            className="absolute left-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white transition-colors hover:bg-black/85 focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100"
+            className="absolute left-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white transition-colors hover:bg-black/85 focus:outline-none focus:ring-2 focus:ring-portfolio-accent sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100"
             aria-label={`Previous ${title} screenshot`}
           >
             <ChevronLeft className="h-5 w-5" aria-hidden="true" />
@@ -111,7 +110,7 @@ export default function ScreenshotCarousel({
           <button
             type="button"
             onClick={next}
-            className="absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white transition-colors hover:bg-black/85 focus:outline-none focus:ring-2 focus:ring-[#5B8CFF] sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100"
+            className="absolute right-2 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white transition-colors hover:bg-black/85 focus:outline-none focus:ring-2 focus:ring-portfolio-accent sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100"
             aria-label={`Next ${title} screenshot`}
           >
             <ChevronRight className="h-5 w-5" aria-hidden="true" />

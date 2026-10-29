@@ -1,9 +1,9 @@
 {
   "cms-machine-shop": [
     {
-      "src": "/images/project-screenshots/cms-machine-shop/03-dashboard.webp",
-      "alt": "Change Management System — Machine Shop: Dashboard screen; personal and operational data redacted.",
-      "originalName": "Dashboard.png"
+      "src": "/images/project-screenshots/cms-machine-shop/00-transaction-form-preview.webp",
+      "alt": "Change Management System — Machine Shop: blank transaction form preview; employee and operational records omitted.",
+      "originalName": "AddTransaction.png"
     },
     {
       "src": "/images/project-screenshots/cms-machine-shop/01-accessmanagementsystem.webp",
@@ -11,9 +11,9 @@
       "originalName": "AccessManagementSystem.png"
     },
     {
-      "src": "/images/project-screenshots/cms-machine-shop/02-addtransaction.webp",
-      "alt": "Change Management System — Machine Shop: AddTransaction screen; personal and operational data redacted.",
-      "originalName": "AddTransaction.png"
+      "src": "/images/project-screenshots/cms-machine-shop/03-dashboard.webp",
+      "alt": "Change Management System — Machine Shop: Dashboard screen; personal and operational data redacted.",
+      "originalName": "Dashboard.png"
     },
     {
       "src": "/images/project-screenshots/cms-machine-shop/04-ecr-tracking.webp",

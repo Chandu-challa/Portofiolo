@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Chandu Challa | Full Stack Developer — React, Next.js & Python",
+  title: "Chandu Challa | Full Stack Developer",
   description:
-    "Chandu Challa is a Full Stack Developer at GreenTech Industries, building enterprise web applications with React.js, Next.js, TypeScript, Python, FastAPI, and SQL Server.",
+    "Chandu Challa is a Full Stack Developer building reliable business applications with React.js, Next.js, TypeScript, Python, FastAPI, and SQL Server.",
   metadataBase: new URL("https://chandu-challa-portofilo.netlify.app"),
   alternates: { canonical: "/" },
   authors: [{ name: "Chandu Challa" }],
@@ -23,13 +23,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "/",
-    title: "Chandu Challa | Full Stack Developer — React, Next.js & Python",
+    title: "Chandu Challa | Full Stack Developer",
     description:
-      "Full Stack Developer at GreenTech Industries, building enterprise web applications and business workflows.",
+      "Full Stack Developer building reliable web applications with React.js, Next.js, Python, and SQL Server.",
     siteName: "Chandu Challa Portfolio",
     images: [
       {
-        url: "/images/chandu1.png",
+        url: "/images/portfolio-og.jpg",
+        width: 1200,
+        height: 630,
         alt: "Chandu Challa, Full Stack Developer",
       },
     ],
@@ -37,11 +39,14 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Chandu Challa | Full Stack Developer",
-    description:
-      "Full Stack Developer at GreenTech Industries, building enterprise web applications and business workflows.",
-    images: ["/images/chandu1.png"],
+    description: "Building reliable web applications with React.js, Next.js, Python, and SQL Server.",
+    images: ["/images/portfolio-og.jpg"],
   },
   robots: { index: true, follow: true },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0B1220",
 };
 
 export default function RootLayout({

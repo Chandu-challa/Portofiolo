@@ -65,18 +65,18 @@ export default function ContactForm() {
   };
 
   const fieldClassName =
-    'mt-2 w-full rounded-xl border border-portfolio-border bg-portfolio-deep px-4 py-3 text-sm text-portfolio-text placeholder:text-[#77849A] transition-colors focus:border-[#78A0FF] focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]/25';
+    'mt-2 w-full rounded-xl border border-portfolio-border bg-portfolio-bg px-4 py-3 text-base text-portfolio-text placeholder:text-portfolio-muted transition-colors focus:border-portfolio-accent focus:outline-none focus:ring-2 focus:ring-portfolio-accent/25';
 
   return (
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="rounded-3xl border border-portfolio-border bg-portfolio-panel p-5 sm:p-7"
+      className="rounded-2xl border border-portfolio-border bg-portfolio-panel p-5 sm:p-7"
       aria-label="Send Chandu a message"
     >
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="contact-name" className="text-sm font-medium text-[#E5EAF3]">
+          <label htmlFor="contact-name" className="text-sm font-medium text-portfolio-text">
             Your name
           </label>
           <input
@@ -92,7 +92,7 @@ export default function ContactForm() {
         </div>
 
         <div>
-          <label htmlFor="contact-email" className="text-sm font-medium text-[#E5EAF3]">
+          <label htmlFor="contact-email" className="text-sm font-medium text-portfolio-text">
             Email address
           </label>
           <input
@@ -108,7 +108,7 @@ export default function ContactForm() {
         </div>
 
         <div className="sm:col-span-2">
-          <label htmlFor="contact-subject" className="text-sm font-medium text-[#E5EAF3]">
+          <label htmlFor="contact-subject" className="text-sm font-medium text-portfolio-text">
             Subject
           </label>
           <input
@@ -123,7 +123,7 @@ export default function ContactForm() {
         </div>
 
         <div className="sm:col-span-2">
-          <label htmlFor="contact-message" className="text-sm font-medium text-[#E5EAF3]">
+          <label htmlFor="contact-message" className="text-sm font-medium text-portfolio-text">
             Message
           </label>
           <textarea
@@ -160,7 +160,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === 'sending'}
-          className="inline-flex min-h-12 w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-portfolio-accent px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#4A7AEF] focus:outline-none focus:ring-2 focus:ring-[#8EACFF] focus:ring-offset-2 focus:ring-offset-[#111722] disabled:cursor-wait disabled:opacity-70 sm:w-auto"
+          className="inline-flex min-h-12 w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-portfolio-accent px-5 py-3 text-sm font-semibold text-[#0B1220] transition-colors hover:bg-portfolio-accent-light focus:outline-none focus:ring-2 focus:ring-portfolio-accent focus:ring-offset-2 focus:ring-offset-portfolio-panel disabled:cursor-wait disabled:opacity-70 sm:w-auto"
         >
           {status === 'sending' ? (
             <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" />
@@ -173,10 +173,10 @@ export default function ContactForm() {
 
       <div className="mt-4 min-h-6" aria-live="polite" role={status === 'error' || status === 'unconfigured' ? 'alert' : 'status'}>
         {status === 'sent' && (
-          <p className="text-sm text-emerald-300">Message sent. Thanks for reaching out.</p>
+          <p className="text-sm text-[#34D399]">Message sent. Thanks for reaching out.</p>
         )}
         {status === 'error' && (
-          <p className="text-sm text-rose-300">
+          <p className="text-sm text-[#F87171]">
             I couldn’t send your message. Please try again or email{' '}
             <a className="underline underline-offset-2" href="mailto:chanduchanduchalla7@gmail.com">
               Chandu directly
@@ -184,7 +184,7 @@ export default function ContactForm() {
           </p>
         )}
         {status === 'rate-limited' && (
-          <p className="text-sm text-amber-200">
+          <p className="text-sm text-[#FBBF24]">
             Please wait 30 seconds before trying again, or email{' '}
             <a className="underline underline-offset-2" href="mailto:chanduchanduchalla7@gmail.com">
               Chandu directly
@@ -192,7 +192,7 @@ export default function ContactForm() {
           </p>
         )}
         {status === 'unconfigured' && (
-          <p className="text-sm text-amber-200">
+          <p className="text-sm text-[#FBBF24]">
             The form is not connected yet. Please email{' '}
             <a className="underline underline-offset-2" href="mailto:chanduchanduchalla7@gmail.com">
               Chandu directly

@@ -11,9 +11,9 @@ export default function CertificatesSection() {
       className="py-16 sm:py-20"
       aria-labelledby="certificates-heading"
     >
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-6xl px-6">
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.35 }}
@@ -25,7 +25,7 @@ export default function CertificatesSection() {
               Certificates
             </h2>
           </div>
-          <p className="max-w-xl text-sm leading-relaxed text-portfolio-muted">
+          <p className="max-w-xl text-base leading-relaxed text-portfolio-muted">
             Selected certificates in programming, artificial intelligence, and databases.
           </p>
         </motion.div>
@@ -34,7 +34,7 @@ export default function CertificatesSection() {
           {certificates.map((certificate, index) => (
             <motion.article
               key={certificate.id}
-              initial={{ opacity: 0, y: 12 }}
+              initial={false}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
@@ -49,13 +49,14 @@ export default function CertificatesSection() {
                 </span>
               </div>
               <h3 className="text-base font-semibold leading-snug text-portfolio-text">{certificate.title}</h3>
-              <p className="mt-2 text-sm text-portfolio-muted">{certificate.issuer}</p>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-portfolio-muted">{certificate.description}</p>
+              <p className="mt-2 text-base text-portfolio-muted">{certificate.issuer}</p>
+              <p className="mt-3 flex-1 text-base leading-relaxed text-portfolio-muted">{certificate.description}</p>
               <a
                 href={certificate.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-5 inline-flex min-h-11 items-center gap-2 self-start rounded-lg text-sm font-medium text-portfolio-accent-bright transition-colors hover:text-white focus:outline-none focus:ring-2 focus:ring-[#5B8CFF]"
+                aria-label={`View ${certificate.title} certificate`}
+                className="mt-5 inline-flex min-h-11 items-center gap-2 self-start rounded-lg text-sm font-medium text-portfolio-accent-bright transition-colors hover:text-portfolio-text focus:outline-none focus:ring-2 focus:ring-portfolio-accent"
               >
                 View certificate
                 <ExternalLink className="h-4 w-4" aria-hidden="true" />
